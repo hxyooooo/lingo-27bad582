@@ -7,45 +7,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        'primary': '#1890ff',
-        'primary-light': '#e6f7ff',
-        'secondary': '#52c41a',
-        'accent': '#fa8c16',
-        'background': '#f0f2f5',
-        'text-primary': '#333',
-        'text-secondary': '#666',
-        'text-tertiary': '#999',
-        'border': '#d9d9d9',
-        'error': '#ff4d4f',
-        'warning': '#fa8c16',
-        'success': '#52c41a',
-        'info': '#1890ff',
-        'light-blue': '#e6f7ff',
-        'light-green': '#f6ffed',
-        'light-orange': '#fff7e6',
-        'light-gray': '#f5f5f5',
-        'dark-gray': '#ccc',
-        'white': '#ffffff',
-        'black': '#000000'
-      },
-      boxShadow: {
-        'custom': '0 4px 12px rgba(0, 0, 0, 0.08)',
-        'hover': '0 6px 16px rgba(0, 0, 0, 0.12)'
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.3s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 }
-        },
-        slideUp: {
-          '0%': { opacity: 0, transform: 'translateY(20px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' }
-        }
+        primary: '#5B8DEF',      // 浅青花蓝
+        'primary-light': '#E6F0FF',
+        'primary-dark': '#2E66E0',
+        secondary: '#8B5FBF',    // 淡紫罗兰
+        'secondary-light': '#F5EEFF',
+        'secondary-dark': '#6D4C9A',
+        success: '#52C41A',      // 浅松绿
+        'success-light': '#E6FFE6',
+        'success-dark': '#3D8C13',
+        warning: '#FAAD14',      // 淡赭石
+        'warning-light': '#FFF7E6',
+        'warning-dark': '#D48800',
+        error: '#F5222D',        // 薄朱砂
+        'error-light': '#FFE6E6',
+        'error-dark': '#D9363E',
+        info: '#177DDC',         // 深天青
+        'info-light': '#E6F7FF',
+        'info-dark': '#095CB5',
+        background: '#F8FAFC',   // 浅米白
+        surface: '#FFFFFF',      // 洁白
+        text: '#262626',         // 深灰
+        'text-secondary': '#595959',
+        'text-tertiary': '#8C8C8C',
+        border: '#D9D9D9',       // 浅灰
+        'border-light': '#F0F0F0'
       }
     },
   },

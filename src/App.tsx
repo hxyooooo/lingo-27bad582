@@ -1,8 +1,69 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff } from 'lucide-react';
+import { format } from 'date-fns';
 
 // ==========================================
-// 1. 全局数据准备
+// 1. 数据库模拟 (使用localStorage)
+// ==========================================
+
+// 模拟数据库
+const db = {
+  // 今日饮食记录
+  getDietRecords: () => {
+    const records = localStorage.getItem('dietRecords');
+    return records ? JSON.parse(records) : [];
+  },
+  addDietRecord: (record) => {
+    const records = db.getDietRecords();
+    records.push({
+      ...record,
+      id: Date.now() + Math.random(),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('dietRecords', JSON.stringify(records));
+    return records;
+  },
+  deleteDietRecord: (id) => {
+    const records = db.getDietRecords().filter(record => record.id !== id);
+    localStorage.setItem('dietRecords', JSON.stringify(records));
+    return records;
+  },
+  // 健康报告
+  getHealthReports: () => {
+    const reports = localStorage.getItem('healthReports');
+    return reports ? JSON.parse(reports) : [];
+  },
+  addHealthReport: (report) => {
+    const reports = db.getHealthReports();
+    reports.push({
+      ...report,
+      id: Date.now() + Math.random(),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('healthReports', JSON.stringify(reports));
+    return reports;
+  },
+  // 用户信息
+  getUserInfo: () => {
+    const userInfo = localStorage.getItem('userInfo');
+    return userInfo ? JSON.parse(userInfo) : {
+      name: '用户管理员',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+      location: '陕西·西安',
+      id: '8827364',
+      isVip: true,
+      bmi: 21.5,
+      weight: 62.5,
+      targetCalories: 1800
+    };
+  },
+  updateUserInfo: (info) => {
+    localStorage.setItem('userInfo', JSON.stringify(info));
+  }
+};
+
+// ==========================================
+// 2. 全局数据准备
 // ==========================================
 
 // --- 文化传承数据 (非遗长廊) ---
@@ -112,7 +173,7 @@ const seasonalData = {
 };
 
 // ==========================================
-// 2. 页面组件
+// 3. 页面组件
 // ==========================================
 
 // --- 首页 ---
@@ -494,10 +555,53 @@ const CultureView = ({ toPage }) => {
 
 // --- 个人中心 ---
 const PersonalCenterView = ({ dietList = [] }) => {
+  const [activeTab, setActiveTab] = useState('diet');
+  const [healthReports, setHealthReports] = useState([]);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+  
   const safeList = Array.isArray(dietList) ? dietList : [];
+  const userInfo = db.getUserInfo();
   const baseCalories = 1240;
   const addedCalories = safeList.reduce((acc, cur) => acc + (cur.calories || 0), 0);
   const totalCalories = baseCalories + addedCalories;
+
+  // 加载健康报告
+  useEffect(() => {
+    setHealthReports(db.getHealthReports());
+  }, []);
+
+  // 生成健康报告
+  const generateHealthReport = () => {
+    setIsGeneratingReport(true);
+    
+    // 模拟AI生成报告的过程
+    setTimeout(() => {
+      const newReport = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        summary: `根据您今日的饮食情况，总热量摄入${totalCalories}kcal，占目标${Math.round((totalCalories / userInfo.targetCalories) * 100)}%。`,
+        recommendations: [
+          `您今日摄入的热量为${totalCalories}kcal，${totalCalories > userInfo.targetCalories ? '略高于' : '符合'}目标摄入量${userInfo.targetCalories}kcal。`,
+          '建议增加蔬菜摄入，保持营养均衡。',
+          '继续保持良好的饮食习惯。'
+        ],
+        nutrition: {
+          protein: Math.floor(totalCalories * 0.15), // 假设蛋白质占15%
+          carbs: Math.floor(totalCalories * 0.55),   // 假设碳水化合物占55%
+          fat: Math.floor(totalCalories * 0.30)      // 假设脂肪占30%
+        },
+        culturalTips: [
+          '陕西传统饮食注重五味调和，今日推荐搭配一些时令蔬菜。',
+          '根据节气养生，当前时节适合清淡饮食，避免过于油腻。'
+        ]
+      };
+      
+      const updatedReports = db.addHealthReport(newReport);
+      setHealthReports(updatedReports);
+      setIsGeneratingReport(false);
+    }, 2000);
+  };
 
   const MenuItem = ({ icon, title, isRed, onClick }) => (
     <div 
@@ -517,11 +621,11 @@ const PersonalCenterView = ({ dietList = [] }) => {
       {/* 1. 用户信息 */}
       <div className="bg-white rounded-2xl p-8 flex items-center gap-5 shadow-md mb-5">
         <div className="w-20 h-20 rounded-full overflow-hidden">
-          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar" className="w-full h-full" />
+          <img src={userInfo.avatar} alt="avatar" className="w-full h-full" />
         </div>
         <div className="flex-1">
-          <h2 className="m-0 mb-1.5 text-2xl text-gray-800">用户管理员 <span className="text-xs bg-light-orange text-warning px-2 py-0.5 rounded-full border border-warning-light">VIP会员</span></h2>
-          <p className="m-0 text-gray-500 text-sm">ID: 8827364 | 陕西·西安</p>
+          <h2 className="m-0 mb-1.5 text-2xl text-gray-800">{userInfo.name} <span className="text-xs bg-light-orange text-warning px-2 py-0.5 rounded-full border border-warning-light">VIP会员</span></h2>
+          <p className="m-0 text-gray-500 text-sm">ID: {userInfo.id} | {userInfo.location}</p>
         </div>
         <button className="py-2 px-5 border border-primary text-primary bg-white rounded-full cursor-pointer hover:bg-primary-light transition-colors">签到打卡</button>
       </div>
@@ -531,43 +635,109 @@ const PersonalCenterView = ({ dietList = [] }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
         <div className="bg-white p-5 rounded-xl shadow-sm">
           <div className="text-gray-500 text-sm mb-1.5">身体质量指数 (BMI)</div>
-          <div className="text-3xl font-bold text-success">21.5 <span className="text-sm font-normal">正常</span></div>
+          <div className="text-3xl font-bold text-success">{userInfo.bmi} <span className="text-sm font-normal">正常</span></div>
         </div>
         <div className="bg-white p-5 rounded-xl shadow-sm">
           <div className="text-gray-500 text-sm mb-1.5">今日热量摄入</div>
-          <div className="text-3xl font-bold text-primary">{totalCalories} <span className="text-sm font-normal text-gray-500">/ 1800 kcal</span></div>
+          <div className="text-3xl font-bold text-primary">{totalCalories} <span className="text-sm font-normal text-gray-500">/ {userInfo.targetCalories} kcal</span></div>
         </div>
         <div className="bg-white p-5 rounded-xl shadow-sm">
           <div className="text-gray-500 text-sm mb-1.5">当前体重</div>
-          <div className="text-3xl font-bold text-warning">62.5 <span className="text-sm font-normal text-gray-500">kg</span></div>
+          <div className="text-3xl font-bold text-warning">{userInfo.weight} <span className="text-sm font-normal text-gray-500">kg</span></div>
         </div>
       </div>
 
-      {/* 3. 今日饮食清单 */}
-      <h3 className="ml-2.5 text-gray-600">今日饮食清单 (AI识别 / 节气食谱)</h3>
-      <div className="bg-white rounded-2xl p-5 shadow-md mb-8 min-h-25">
-        {safeList.length === 0 ? (
-          <div className="text-center text-gray-400 p-5">
-            <div className="text-5xl mb-2.5">📝</div>
-            <div>暂无记录</div>
-            <div className="text-xs mt-1.5">请使用AI识食或节气食谱功能添加</div>
-          </div>
-        ) : (
-          safeList.map((item, index) => (
-            <div key={index} className="flex justify-between items-center p-3 border-b border-gray-100 last:border-0">
-              <div>
-                <div className="text-lg text-gray-800 font-medium">{item.name}</div>
-                <div className="text-xs text-gray-500">{item.unit || ''}</div>
-              </div>
-              <div className="text-xl font-bold text-primary">
-                {item.calories} kcal
-              </div>
-            </div>
-          ))
-        )}
+      {/* 3. 标签页切换 */}
+      <div className="flex gap-4 mb-5 border-b border-gray-200">
+        <button 
+          onClick={() => setActiveTab('diet')}
+          className={`pb-3 px-4 font-medium ${activeTab === 'diet' ? 'text-primary border-b-2 border-primary' : 'text-gray-500'}`}
+        >
+          今日饮食清单
+        </button>
+        <button 
+          onClick={() => setActiveTab('reports')}
+          className={`pb-3 px-4 font-medium ${activeTab === 'reports' ? 'text-primary border-b-2 border-primary' : 'text-gray-500'}`}
+        >
+          健康报告
+        </button>
       </div>
 
-      {/* 4. 菜单列表 */}
+      {/* 4. 内容区域 */}
+      {activeTab === 'diet' && (
+        <div className="bg-white rounded-2xl p-5 shadow-md mb-8 min-h-25">
+          {safeList.length === 0 ? (
+            <div className="text-center text-gray-400 p-5">
+              <div className="text-5xl mb-2.5">📝</div>
+              <div>暂无记录</div>
+              <div className="text-xs mt-1.5">请使用AI识食或节气食谱功能添加</div>
+            </div>
+          ) : (
+            safeList.map((item, index) => (
+              <div key={item.id || index} className="flex justify-between items-center p-3 border-b border-gray-100 last:border-0">
+                <div>
+                  <div className="text-lg text-gray-800 font-medium">{item.name}</div>
+                  <div className="text-xs text-gray-500">{item.unit || ''}</div>
+                </div>
+                <div className="text-xl font-bold text-primary">
+                  {item.calories} kcal
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {activeTab === 'reports' && (
+        <div className="bg-white rounded-2xl p-5 shadow-md mb-8 min-h-25">
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-xl font-semibold text-gray-800">健康报告</h3>
+            <button 
+              onClick={generateHealthReport}
+              disabled={isGeneratingReport}
+              className={`px-4 py-2 rounded-lg text-white font-medium ${
+                isGeneratingReport ? 'bg-gray-400' : 'bg-success hover:bg-success-dark'
+              }`}
+            >
+              {isGeneratingReport ? '生成中...' : '生成今日报告'}
+            </button>
+          </div>
+          
+          {healthReports.length === 0 ? (
+            <div className="text-center text-gray-400 p-10">
+              <div className="text-5xl mb-2.5">📊</div>
+              <div>暂无健康报告</div>
+              <div className="text-xs mt-1.5">点击上方按钮生成今日健康报告</div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {healthReports.map((report) => (
+                <div 
+                  key={report.id} 
+                  onClick={() => setSelectedReport(report)}
+                  className="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-medium text-gray-800">
+                        {format(new Date(report.date), 'yyyy年MM月dd日')}
+                      </div>
+                      <div className="text-sm text-gray-500 mt-1">
+                        {report.summary}
+                      </div>
+                    </div>
+                    <div className="text-xs bg-success-light text-success px-2 py-1 rounded">
+                      已生成
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 5. 菜单列表 */}
       <div className="bg-white rounded-2xl overflow-hidden shadow-md">
         <MenuItem icon="📊" title="历史数据统计" />
         <MenuItem icon="🎯" title="健康目标设置" />
@@ -576,6 +746,83 @@ const PersonalCenterView = ({ dietList = [] }) => {
         <MenuItem icon="❓" title="帮助与反馈" />
         <MenuItem icon="🚪" title="退出登录" isRed />
       </div>
+
+      {/* 健康报告详情弹窗 */}
+      {selectedReport && (
+        <div 
+          onClick={() => setSelectedReport(null)}
+          className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl max-w-2xl w-full max-h-90vh overflow-y-auto shadow-2xl"
+          >
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl m-0 text-gray-800">健康报告</h2>
+                  <p className="text-gray-500 m-0 mt-1">
+                    {format(new Date(selectedReport.date), 'yyyy年MM月dd日 HH:mm')}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedReport(null)}
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">总体评估</h3>
+                <p className="text-gray-700">{selectedReport.summary}</p>
+              </div>
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">营养分析</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-blue-600">{selectedReport.nutrition.protein}g</div>
+                    <div className="text-sm text-gray-600">蛋白质</div>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-green-600">{selectedReport.nutrition.carbs}g</div>
+                    <div className="text-sm text-gray-600">碳水化合物</div>
+                  </div>
+                  <div className="bg-yellow-50 p-4 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-yellow-600">{selectedReport.nutrition.fat}g</div>
+                    <div className="text-sm text-gray-600">脂肪</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">健康建议</h3>
+                <ul className="space-y-2">
+                  {selectedReport.recommendations.map((rec, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <div className="text-success mr-2">✓</div>
+                      <span className="text-gray-700">{rec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">陕西文化贴士</h3>
+                <ul className="space-y-2">
+                  {selectedReport.culturalTips.map((tip, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <div className="text-warning mr-2">💡</div>
+                      <span className="text-gray-700">{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -749,7 +996,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 };
 
 // ==========================================
-// 3. 布局结构 (修改版：左侧导航 + 顶部标题栏)
+// 4. 布局结构 (修改版：左侧导航 + 顶部标题栏)
 // ==========================================
 
 // 侧边栏按钮组件
@@ -769,12 +1016,19 @@ const SidebarItem = ({ label, icon, active, onClick }) => (
 
 function App() {
   const [activePage, setActivePage] = useState('home');
-  const [dietList, setDietList] = useState([]);
+  const [dietList, setDietList] = useState(db.getDietRecords());
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
 
   // 通用添加方法（保持功能不变）
   const handleAddToDiet = (foodItem) => {
-    setDietList(prev => [...prev, { ...foodItem, id: Date.now() + Math.random() }]);
+    const updatedList = db.addDietRecord(foodItem);
+    setDietList(updatedList);
+  };
+
+  // 删除饮食记录
+  const handleDeleteDiet = (id) => {
+    const updatedList = db.deleteDietRecord(id);
+    setDietList(updatedList);
   };
 
   return (
@@ -840,7 +1094,7 @@ function App() {
           {activePage === 'recognition' && <RecognitionView onAdd={handleAddToDiet} />}
           {activePage === 'season' && <SeasonalView onAdd={handleAddToDiet} />}
           {activePage === 'culture' && <CultureView />}
-          {activePage === 'report' && <PersonalCenterView dietList={dietList} />}
+          {activePage === 'report' && <PersonalCenterView dietList={dietList} onDelete={handleDeleteDiet} />}
         </main>
       </div>
       
