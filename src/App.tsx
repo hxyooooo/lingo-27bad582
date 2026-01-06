@@ -354,10 +354,10 @@ const generateAIHealthReport = (userInfo, dietList, historicalData) => {
   
   // 生成陕西文化贴士
   const seasonalTips = [
-    '陕西传统饮食注重五味调和，今日推荐搭配一些时令蔬菜，如春季的韭菜、夏季的冬瓜等。',
-    '根据节气养生，当前时节适合清淡饮食，避免过于油腻，可适当食用一些具有地方特色的养生食材。',
-    '陕西人有"冬吃萝卜夏吃姜"的养生智慧，根据季节调整饮食结构，有助于身体健康。',
-    '传统陕西美食如肉夹馍、凉皮等虽美味，但需注意搭配蔬菜，保证营养均衡。'
+    '陕西传统饮食注重五味调和，今日推荐搭配一些时令蔬菜，如春季的韭菜、夏季的冬瓜等.',
+    '根据节气养生，当前时节适合清淡饮食，避免过于油腻，可适当食用一些具有地方特色的养生食材.',
+    '陕西人有"冬吃萝卜夏吃姜"的养生智慧，根据季节调整饮食结构，有助于身体健康.',
+    '传统陕西美食如肉夹馍、凉皮等虽美味，但需注意搭配蔬菜，保证营养均衡.'
   ];
   
   const randomSeasonalTip = seasonalTips[Math.floor(Math.random() * seasonalTips.length)];
@@ -405,12 +405,12 @@ const generateAIHealthReport = (userInfo, dietList, historicalData) => {
     },
     culturalTips: [
       randomSeasonalTip,
-      '陕西饮食文化博大精深，合理搭配传统美食与现代营养学知识，有助于实现健康目标。',
-      '根据个人体质和季节变化选择合适的陕西传统美食，既满足味蕾又维护健康。'
+      '陕西饮食文化博大精深，合理搭配传统美食与现代营养学知识，有助于实现健康目标.',
+      '根据个人体质和季节变化选择合适的陕西传统美食，既满足味蕾又维护健康.'
     ],
     personalizedInsights: {
       title: '个性化洞察',
-      content: `基于您的个人数据（BMI: ${userInfo.bmi}, 目标热量: ${userInfo.targetCalories}kcal）和今日饮食记录，系统为您生成了这份个性化健康报告。`
+      content: `基于您的个人数据（BMI: ${userInfo.bmi}, 目标热量: ${userInfo.targetCalories}kcal）和今日饮食记录，系统为您生成了这份个性化健康报告.`
     }
   };
 };
@@ -483,9 +483,9 @@ const RecognitionView = ({ onAdd }) => {
   const fileInputRef = useRef(null);
 
   const mockDatabase = [
-    { name: '腊汁肉夹馍', calories: 455, unit: '个', intro: '陕西省非物质文化遗产，中式汉堡。', recipe: '老卤炖煮五花肉，白吉馍烤制酥脆。' },
-    { name: '羊肉泡馍', calories: 560, unit: '碗', intro: '苏轼赞誉"秦烹唯羊羹"。', recipe: '羊骨熬汤，死面烙饼，配糖蒜辣酱。' },
-    { name: '秦镇米皮', calories: 280, unit: '份', intro: '色白光润，皮薄筋道，酸辣味浓。', recipe: '大米磨浆蒸制，切条拌入秘制调料。' }
+    { name: '腊汁肉夹馍', calories: 455, unit: '个', intro: '陕西省非物质文化遗产，中式汉堡.', recipe: '老卤炖煮五花肉，白吉馍烤制酥脆.' },
+    { name: '羊肉泡馍', calories: 560, unit: '碗', intro: '苏轼赞誉"秦烹唯羊羹".', recipe: '羊骨熬汤，死面烙饼，配糖蒜辣酱.' },
+    { name: '秦镇米皮', calories: 280, unit: '份', intro: '色白光润，皮薄筋道，酸辣味浓.', recipe: '大米磨浆蒸制，切条拌入秘制调料.' }
   ];
 
   const handleBtnClick = () => fileInputRef.current.click();
@@ -515,7 +515,7 @@ const RecognitionView = ({ onAdd }) => {
   const handleAddToDiet = () => {
     if(onAdd) {
         onAdd(result);
-        alert(`成功！已将【${result.name}】加入个人中心的饮食清单。`);
+        alert(`成功！已将【${result.name}】加入个人中心的饮食清单.`);
     }
   };
 
@@ -592,7 +592,7 @@ const RecognitionView = ({ onAdd }) => {
             <div className="bg-error-light p-10 rounded-2xl h-88 flex flex-col justify-center items-center text-error border border-error-light">
               <div className="text-6xl mb-5">⚠️</div>
               <h3 className="m-0 mb-2.5">无法识别图片内容</h3>
-              <p className="m-0 text-gray-600 text-center max-w-xs">未检测到已知的陕西非遗菜品，请确保图片清晰，主体完整。</p>
+              <p className="m-0 text-gray-600 text-center max-w-xs">未检测到已知的陕西非遗菜品，请确保图片清晰，主体完整.</p>
             </div>
           )}
         </div>
