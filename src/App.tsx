@@ -1253,6 +1253,17 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
     }, 2000);
   };
 
+  // 删除健康报告
+  const handleDeleteReport = (id) => {
+    if (window.confirm('确定要删除这份健康报告吗？')) {
+      const updatedReports = db.deleteHealthReport(id);
+      setHealthReports(updatedReports);
+      if (selectedReport && selectedReport.id === id) {
+        setSelectedReport(null);
+      }
+    }
+  };
+
   // 修复后的 MenuItem 组件 - 确保 title 始终有值
   const MenuItem = ({ icon, title = '', isRed, onClick }) => (
     <div 
@@ -1373,11 +1384,13 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
               {healthReports.map((report) => (
                 <div 
                   key={report.id} 
-                  onClick={() => setSelectedReport(report)}
-                  className="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                  className="p-4 border border-gray-200 rounded-lg"
                 >
                   <div className="flex justify-between items-start">
-                    <div>
+                    <div 
+                      onClick={() => setSelectedReport(report)}
+                      className="flex-1 cursor-pointer"
+                    >
                       <div className="font-medium text-gray-800">
                         {format(new Date(report.date), 'yyyy年MM月dd日')}
                       </div>
@@ -1385,8 +1398,19 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
                         {report.summary}
                       </div>
                     </div>
-                    <div className="text-xs bg-success-light text-success px-2 py-1 rounded">
-                      已生成
+                    <div className="flex gap-2 ml-4">
+                      <button
+                        onClick={() => setSelectedReport(report)}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        查看
+                      </button>
+                      <button
+                        onClick={() => handleDeleteReport(report.id)}
+                        className="text-error hover:text-error-dark"
+                      >
+                        删除
+                      </button>
                     </div>
                   </div>
                 </div>
