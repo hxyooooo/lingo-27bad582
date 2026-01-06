@@ -1221,7 +1221,7 @@ const HealthGoalsView = () => {
   );
 };
 
-// --- 个人中心 ---
+// --- [修复后] 个人中心 ---
 const PersonalCenterView = ({ dietList = [], onDelete }) => {
   const [activeTab, setActiveTab] = useState('diet');
   const [healthReports, setHealthReports] = useState([]);
@@ -1253,7 +1253,8 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
     }, 2000);
   };
 
-  const MenuItem = ({ icon, title, isRed, onClick }) => (
+  // 修复后的 MenuItem 组件 - 确保 title 始终有值
+  const MenuItem = ({ icon, title = '', isRed, onClick }) => (
     <div 
       onClick={onClick} 
       className={`flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer text-${isRed ? 'error' : 'gray-800'} transition-colors hover:bg-gray-50`}

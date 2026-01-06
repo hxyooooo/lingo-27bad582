@@ -8,35 +8,50 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4A90E2', // 浅青花蓝
-          light: '#D6E4F0',   // 浅青花蓝浅色
-          dark: '#357ABD',    // 浅青花蓝深色
+          DEFAULT: '#4A90E2', // 浅青花蓝主色
+          light: '#85B8F0',   // 浅青花蓝亮色
+          dark: '#2A5A99',    // 浅青花蓝暗色
         },
         secondary: {
-          DEFAULT: '#D2691E', // 淡赭石色
-          light: '#E8C4A8',   // 淡赭石色浅色
-          dark: '#A0522D',    // 淡赭石色深色
+          DEFAULT: '#F5A623', // 深赭石色
+          light: '#F8C466',   // 浅赭石色
+          dark: '#D98B0D',    // 深赭石暗色
         },
         success: {
-          DEFAULT: '#52C41A', // 浅松绿
-          light: '#D9F7BE',   // 浅松绿浅色
-          dark: '#389E0D',    // 浅松绿深色
+          DEFAULT: '#50C878', // 浅松绿
+          light: '#81D8A3',   // 浅松绿亮色
+          dark: '#38A85A',    // 浅松绿暗色
         },
         warning: {
-          DEFAULT: '#FAAD14', // 淡藤黄
-          light: '#FFFBE6',   // 淡藤黄浅色
-          dark: '#D48806',    // 淡藤黄深色
+          DEFAULT: '#FFD700', // 浅铬黄
+          light: '#FFE566',   // 浅铬黄亮色
+          dark: '#D9B800',    // 浅铬黄暗色
         },
         error: {
-          DEFAULT: '#F5222D', // 铁红
-          light: '#FFECE8',   // 铁红浅色
-          dark: '#CF1322',    // 铁红深色
+          DEFAULT: '#FF4757', // 珊瑚红
+          light: '#FF7A85',   // 珊瑚红亮色
+          dark: '#D93A49',    // 珊瑚红暗色
         },
-        background: '#F5F7FA', // 淡月白
-        info: '#177DDC',      // 浅天青
-        light: '#FAFBFC',     // 淡云白
-        dark: '#0A0A0A',      // 墨色
-      },
+        info: {
+          DEFAULT: '#2E86AB', // 浅青蓝
+          light: '#5BA1C3',   // 浅青蓝亮色
+          dark: '#246A88',    // 浅青蓝暗色
+        },
+        background: {
+          DEFAULT: '#F8F9FA', // 背景色
+        },
+        text: {
+          DEFAULT: '#212529', // 文本色
+          secondary: '#495057', // 次要文本色
+        },
+        light: {
+          blue: '#E6F7FF',    // 浅蓝色背景
+          orange: '#FFF2E8',  // 浅橙色背景
+          green: '#F6FFED',   // 浅绿色背景
+          red: '#FFF1F0',     // 浅红色背景
+          yellow: '#FEFCE8',  // 浅黄色背景
+        }
+      }
     },
   },
   plugins: [],

@@ -9,21 +9,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  overflow: hidden; /* 防止全局滚动 */
 }
 
 /* 自定义滚动条样式 */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -32,5 +29,12 @@ code {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: #a1a1a1;
+}
+
+/* 确保应用容器占满全屏 */
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
