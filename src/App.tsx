@@ -23,6 +23,15 @@ const db = {
     localStorage.setItem('dietRecords', JSON.stringify(records));
     return records;
   },
+  updateDietRecord: (id, updatedRecord) => {
+    const records = db.getDietRecords();
+    const index = records.findIndex(record => record.id === id);
+    if (index !== -1) {
+      records[index] = { ...records[index], ...updatedRecord };
+      localStorage.setItem('dietRecords', JSON.stringify(records));
+    }
+    return records;
+  },
   deleteDietRecord: (id) => {
     const records = db.getDietRecords().filter(record => record.id !== id);
     localStorage.setItem('dietRecords', JSON.stringify(records));
@@ -42,6 +51,78 @@ const db = {
     });
     localStorage.setItem('healthReports', JSON.stringify(reports));
     return reports;
+  },
+  updateHealthReport: (id, updatedReport) => {
+    const reports = db.getHealthReports();
+    const index = reports.findIndex(report => report.id === id);
+    if (index !== -1) {
+      reports[index] = { ...reports[index], ...updatedReport };
+      localStorage.setItem('healthReports', JSON.stringify(reports));
+    }
+    return reports;
+  },
+  deleteHealthReport: (id) => {
+    const reports = db.getHealthReports().filter(report => report.id !== id);
+    localStorage.setItem('healthReports', JSON.stringify(reports));
+    return reports;
+  },
+  // 历史数据统计
+  getHistoricalData: () => {
+    const data = localStorage.getItem('historicalData');
+    return data ? JSON.parse(data) : [];
+  },
+  addHistoricalData: (data) => {
+    const historicalData = db.getHistoricalData();
+    historicalData.push({
+      ...data,
+      id: Date.now() + Math.random(),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    return historicalData;
+  },
+  updateHistoricalData: (id, updatedData) => {
+    const historicalData = db.getHistoricalData();
+    const index = historicalData.findIndex(item => item.id === id);
+    if (index !== -1) {
+      historicalData[index] = { ...historicalData[index], ...updatedData };
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    }
+    return historicalData;
+  },
+  deleteHistoricalData: (id) => {
+    const historicalData = db.getHistoricalData().filter(item => item.id !== id);
+    localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    return historicalData;
+  },
+  // 健康目标设置
+  getHealthGoals: () => {
+    const goals = localStorage.getItem('healthGoals');
+    return goals ? JSON.parse(goals) : [];
+  },
+  addHealthGoal: (goal) => {
+    const goals = db.getHealthGoals();
+    goals.push({
+      ...goal,
+      id: Date.now() + Math.random(),
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('healthGoals', JSON.stringify(goals));
+    return goals;
+  },
+  updateHealthGoal: (id, updatedGoal) => {
+    const goals = db.getHealthGoals();
+    const index = goals.findIndex(goal => goal.id === id);
+    if (index !== -1) {
+      goals[index] = { ...goals[index], ...updatedGoal };
+      localStorage.setItem('healthGoals', JSON.stringify(goals));
+    }
+    return goals;
+  },
+  deleteHealthGoal: (id) => {
+    const goals = db.getHealthGoals().filter(goal => goal.id !== id);
+    localStorage.setItem('healthGoals', JSON.stringify(goals));
+    return goals;
   },
   // 用户信息
   getUserInfo: () => {
@@ -553,8 +634,433 @@ const CultureView = ({ toPage }) => {
   );
 };
 
+// --- [新增] 历史数据统计组件 ---
+const HistoricalDataView = () => {
+  const [historicalData, setHistoricalData] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [formData, setFormData] = useState({
+    date: '',
+    weight: '',
+    calories: '',
+    notes: ''
+  });
+
+  // 加载历史数据
+  useEffect(() => {
+    setHistoricalData(db.getHistoricalData());
+  }, []);
+
+  // 提交表单
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editingItem) {
+      // 更新数据
+      const updatedData = db.updateHistoricalData(editingItem.id, formData);
+      setHistoricalData(updatedData);
+      setEditingItem(null);
+    } else {
+      // 添加新数据
+      const newData = db.addHistoricalData(formData);
+      setHistoricalData(newData);
+    }
+    setFormData({ date: '', weight: '', calories: '', notes: '' });
+    setShowForm(false);
+  };
+
+  // 编辑数据
+  const handleEdit = (item) => {
+    setEditingItem(item);
+    setFormData({
+      date: item.date,
+      weight: item.weight,
+      calories: item.calories,
+      notes: item.notes
+    });
+    setShowForm(true);
+  };
+
+  // 删除数据
+  const handleDelete = (id) => {
+    if (window.confirm('确定要删除这条记录吗？')) {
+      const updatedData = db.deleteHistoricalData(id);
+      setHistoricalData(updatedData);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-5">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl text-gray-800 m-0">📊 历史数据统计</h2>
+        <button
+          onClick={() => {
+            setEditingItem(null);
+            setFormData({ date: '', weight: '', calories: '', notes: '' });
+            setShowForm(true);
+          }}
+          className="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" /> 添加记录
+        </button>
+      </div>
+
+      {/* 添加/编辑表单 */}
+      {showForm && (
+        <div className="bg-white rounded-2xl p-6 mb-8 shadow-md">
+          <h3 className="text-xl m-0 mb-4 text-gray-800">
+            {editingItem ? '编辑记录' : '添加新记录'}
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 mb-2">日期</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">体重 (kg)</label>
+                <input
+                  type="number"
+                  value={formData.weight}
+                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                  step="0.1"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">热量摄入 (kcal)</label>
+                <input
+                  type="number"
+                  value={formData.calories}
+                  onChange={(e) => setFormData({ ...formData, calories: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">备注</label>
+                <input
+                  type="text"
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-success text-white rounded-lg"
+              >
+                {editingItem ? '更新' : '添加'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingItem(null);
+                  setFormData({ date: '', weight: '', calories: '', notes: '' });
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              >
+                取消
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* 数据列表 */}
+      <div className="bg-white rounded-2xl p-5 shadow-md">
+        {historicalData.length === 0 ? (
+          <div className="text-center text-gray-400 p-10">
+            <div className="text-5xl mb-2.5">📊</div>
+            <div>暂无历史数据</div>
+            <div className="text-xs mt-1.5">点击上方按钮添加第一条记录</div>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left p-3 text-gray-600">日期</th>
+                  <th className="text-left p-3 text-gray-600">体重 (kg)</th>
+                  <th className="text-left p-3 text-gray-600">热量摄入 (kcal)</th>
+                  <th className="text-left p-3 text-gray-600">备注</th>
+                  <th className="text-left p-3 text-gray-600">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {historicalData.map((item) => (
+                  <tr key={item.id} className="border-b border-gray-100">
+                    <td className="p-3">{item.date}</td>
+                    <td className="p-3">{item.weight}</td>
+                    <td className="p-3">{item.calories}</td>
+                    <td className="p-3">{item.notes || '-'}</td>
+                    <td className="p-3">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          编辑
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          删除
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// --- [新增] 健康目标设置组件 ---
+const HealthGoalsView = () => {
+  const [healthGoals, setHealthGoals] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editingGoal, setEditingGoal] = useState(null);
+  const [formData, setFormData] = useState({
+    goalType: 'weight',
+    targetValue: '',
+    targetDate: '',
+    currentValue: '',
+    notes: ''
+  });
+
+  // 加载健康目标
+  useEffect(() => {
+    setHealthGoals(db.getHealthGoals());
+  }, []);
+
+  // 提交表单
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editingGoal) {
+      // 更新目标
+      const updatedGoals = db.updateHealthGoal(editingGoal.id, formData);
+      setHealthGoals(updatedGoals);
+      setEditingGoal(null);
+    } else {
+      // 添加新目标
+      const newGoal = db.addHealthGoal(formData);
+      setHealthGoals(newGoal);
+    }
+    setFormData({
+      goalType: 'weight',
+      targetValue: '',
+      targetDate: '',
+      currentValue: '',
+      notes: ''
+    });
+    setShowForm(false);
+  };
+
+  // 编辑目标
+  const handleEdit = (goal) => {
+    setEditingGoal(goal);
+    setFormData({
+      goalType: goal.goalType,
+      targetValue: goal.targetValue,
+      targetDate: goal.targetDate,
+      currentValue: goal.currentValue,
+      notes: goal.notes
+    });
+    setShowForm(true);
+  };
+
+  // 删除目标
+  const handleDelete = (id) => {
+    if (window.confirm('确定要删除这个目标吗？')) {
+      const updatedGoals = db.deleteHealthGoal(id);
+      setHealthGoals(updatedGoals);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-5">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl text-gray-800 m-0">🎯 健康目标设置</h2>
+        <button
+          onClick={() => {
+            setEditingGoal(null);
+            setFormData({
+              goalType: 'weight',
+              targetValue: '',
+              targetDate: '',
+              currentValue: '',
+              notes: ''
+            });
+            setShowForm(true);
+          }}
+          className="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" /> 设置目标
+        </button>
+      </div>
+
+      {/* 添加/编辑表单 */}
+      {showForm && (
+        <div className="bg-white rounded-2xl p-6 mb-8 shadow-md">
+          <h3 className="text-xl m-0 mb-4 text-gray-800">
+            {editingGoal ? '编辑目标' : '设置新目标'}
+          </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 mb-2">目标类型</label>
+                <select
+                  value={formData.goalType}
+                  onChange={(e) => setFormData({ ...formData, goalType: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="weight">体重管理</option>
+                  <option value="calories">热量摄入</option>
+                  <option value="exercise">运动目标</option>
+                  <option value="sleep">睡眠目标</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">目标值</label>
+                <input
+                  type="text"
+                  value={formData.targetValue}
+                  onChange={(e) => setFormData({ ...formData, targetValue: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">截止日期</label>
+                <input
+                  type="date"
+                  value={formData.targetDate}
+                  onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">当前值</label>
+                <input
+                  type="text"
+                  value={formData.currentValue}
+                  onChange={(e) => setFormData({ ...formData, currentValue: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-gray-700 mb-2">备注</label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  rows="3"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-success text-white rounded-lg"
+              >
+                {editingGoal ? '更新' : '设置'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingGoal(null);
+                  setFormData({
+                    goalType: 'weight',
+                    targetValue: '',
+                    targetDate: '',
+                    currentValue: '',
+                    notes: ''
+                  });
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              >
+                取消
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* 目标列表 */}
+      <div className="bg-white rounded-2xl p-5 shadow-md">
+        {healthGoals.length === 0 ? (
+          <div className="text-center text-gray-400 p-10">
+            <div className="text-5xl mb-2.5">🎯</div>
+            <div>暂无健康目标</div>
+            <div className="text-xs mt-1.5">点击上方按钮设置您的第一个健康目标</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {healthGoals.map((goal) => (
+              <div key={goal.id} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 m-0">
+                      {goal.goalType === 'weight' && '体重管理'}
+                      {goal.goalType === 'calories' && '热量摄入'}
+                      {goal.goalType === 'exercise' && '运动目标'}
+                      {goal.goalType === 'sleep' && '睡眠目标'}
+                    </h3>
+                    <p className="text-sm text-gray-600 m-0">目标: {goal.targetValue}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(goal)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      编辑
+                    </button>
+                    <button
+                      onClick={() => handleDelete(goal.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      删除
+                    </button>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-600 mb-2">
+                  <div>当前值: {goal.currentValue}</div>
+                  <div>截止日期: {goal.targetDate}</div>
+                </div>
+                {goal.notes && (
+                  <div className="text-sm text-gray-700 bg-gray-50 p-2 rounded">
+                    {goal.notes}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // --- 个人中心 ---
-const PersonalCenterView = ({ dietList = [] }) => {
+const PersonalCenterView = ({ dietList = [], onDelete }) => {
   const [activeTab, setActiveTab] = useState('diet');
   const [healthReports, setHealthReports] = useState([]);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
@@ -682,6 +1188,14 @@ const PersonalCenterView = ({ dietList = [] }) => {
                 <div className="text-xl font-bold text-primary">
                   {item.calories} kcal
                 </div>
+                {onDelete && (
+                  <button
+                    onClick={() => onDelete(item.id)}
+                    className="text-error hover:text-error-dark ml-3"
+                  >
+                    删除
+                  </button>
+                )}
               </div>
             ))
           )}
@@ -739,8 +1253,16 @@ const PersonalCenterView = ({ dietList = [] }) => {
 
       {/* 5. 菜单列表 */}
       <div className="bg-white rounded-2xl overflow-hidden shadow-md">
-        <MenuItem icon="📊" title="历史数据统计" />
-        <MenuItem icon="🎯" title="健康目标设置" />
+        <MenuItem 
+          icon="📊" 
+          title="历史数据统计" 
+          onClick={() => window.location.hash = '#historical-data'} 
+        />
+        <MenuItem 
+          icon="🎯" 
+          title="健康目标设置" 
+          onClick={() => window.location.hash = '#health-goals'} 
+        />
         <MenuItem icon="📱" title="消息通知" />
         <MenuItem icon="🔧" title="系统设置" />
         <MenuItem icon="❓" title="帮助与反馈" />
@@ -869,8 +1391,18 @@ const AIAssistant = ({ isOpen, onClose }) => {
       return '您可以使用我们的AI识食功能，只需上传一张陕西传统美食的图片，系统就能识别菜品名称、热量和制作方法。非常方便！';
     }
     
+    // 针对历史数据的回复
+    if (lowerMsg.includes('历史') || lowerMsg.includes('数据') || lowerMsg.includes('统计')) {
+      return '您可以在个人中心的"历史数据统计"功能中查看和管理您的健康数据，包括体重、热量摄入等历史记录。这些数据有助于您更好地了解自己的健康状况和进步情况。';
+    }
+    
+    // 针对健康目标的回复
+    if (lowerMsg.includes('目标') || lowerMsg.includes('计划') || lowerMsg.includes('设定')) {
+      return '在个人中心的"健康目标设置"功能中，您可以设定个性化的健康目标，如体重管理、热量摄入控制等。系统会根据您的目标提供相应的建议和跟踪。';
+    }
+    
     // 默认回复
-    return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配等方面的问题。';
+    return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等方面的问题。';
   };
 
   const handleSendMessage = () => {
@@ -987,7 +1519,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
             </button>
           </div>
           <div className="text-xs text-gray-500 mt-2">
-            您可以询问陕西非遗美食、节气饮食、营养搭配等相关问题
+            您可以询问陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等相关问题
           </div>
         </div>
       </div>
@@ -1018,6 +1550,25 @@ function App() {
   const [activePage, setActivePage] = useState('home');
   const [dietList, setDietList] = useState(db.getDietRecords());
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+
+  // 监听URL hash变化
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#historical-data') {
+        setActivePage('historical-data');
+      } else if (hash === '#health-goals') {
+        setActivePage('health-goals');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // 初始化
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   // 通用添加方法（保持功能不变）
   const handleAddToDiet = (foodItem) => {
@@ -1095,6 +1646,8 @@ function App() {
           {activePage === 'season' && <SeasonalView onAdd={handleAddToDiet} />}
           {activePage === 'culture' && <CultureView />}
           {activePage === 'report' && <PersonalCenterView dietList={dietList} onDelete={handleDeleteDiet} />}
+          {activePage === 'historical-data' && <HistoricalDataView />}
+          {activePage === 'health-goals' && <HealthGoalsView />}
         </main>
       </div>
       
