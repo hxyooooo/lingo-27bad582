@@ -254,7 +254,169 @@ const seasonalData = {
 };
 
 // ==========================================
-// 3. 页面组件
+// 3. AI健康报告生成算法
+// ==========================================
+
+// AI健康报告生成函数
+const generateAIHealthReport = (userInfo, dietList, historicalData) => {
+  // 计算基础数据
+  const baseCalories = 1240;
+  const addedCalories = dietList.reduce((acc, cur) => acc + (cur.calories || 0), 0);
+  const totalCalories = baseCalories + addedCalories;
+  const caloriePercentage = (totalCalories / userInfo.targetCalories) * 100;
+  
+  // 计算营养素估算（基于热量分配）
+  const estimatedProtein = Math.floor(totalCalories * 0.15 / 4); // 每克蛋白质4卡路里
+  const estimatedCarbs = Math.floor(totalCalories * 0.55 / 4);   // 每克碳水化合物4卡路里
+  const estimatedFat = Math.floor(totalCalories * 0.30 / 9);     // 每克脂肪9卡路里
+  
+  // 生成个性化评估
+  let calorieAssessment = '';
+  let calorieRecommendation = '';
+  
+  if (caloriePercentage < 80) {
+    calorieAssessment = `您今日的热量摄入为${totalCalories}kcal，仅达到目标的${Math.round(caloriePercentage)}%，摄入量偏低。`;
+    calorieRecommendation = `建议适当增加营养密度高的食物，如坚果、牛油果等健康脂肪，以及优质蛋白质如鸡蛋、瘦肉等，以达到每日营养需求。`;
+  } else if (caloriePercentage > 120) {
+    calorieAssessment = `您今日的热量摄入为${totalCalories}kcal，超出目标${Math.round(caloriePercentage - 100)}%，摄入量偏高。`;
+    calorieRecommendation = `建议适当减少高热量食物的摄入，增加蔬菜、水果等低热量高纤维食物的比例，保持营养均衡。`;
+  } else {
+    calorieAssessment = `您今日的热量摄入为${totalCalories}kcal，占目标的${Math.round(caloriePercentage)}%，摄入量适中。`;
+    calorieRecommendation = '继续保持当前的饮食习惯，注意食物多样化，确保各类营养素的均衡摄入。';
+  }
+  
+  // 基于BMI的健康评估
+  let bmiAssessment = '';
+  let bmiRecommendation = '';
+  
+  if (userInfo.bmi < 18.5) {
+    bmiAssessment = '您的BMI为' + userInfo.bmi + '，属于偏瘦范围。';
+    bmiRecommendation = '建议适当增加热量摄入，特别是蛋白质和健康脂肪的摄入，帮助增加体重至健康范围。';
+  } else if (userInfo.bmi >= 18.5 && userInfo.bmi < 24) {
+    bmiAssessment = '您的BMI为' + userInfo.bmi + '，属于正常范围。';
+    bmiRecommendation = '继续保持当前的饮食和运动习惯，维持健康体重。';
+  } else if (userInfo.bmi >= 24 && userInfo.bmi < 28) {
+    bmiAssessment = '您的BMI为' + userInfo.bmi + '，属于超重范围。';
+    bmiRecommendation = '建议适当控制热量摄入，增加运动量，逐步将体重调整至健康范围。';
+  } else {
+    bmiAssessment = '您的BMI为' + userInfo.bmi + '，属于肥胖范围。';
+    bmiRecommendation = '建议制定科学的减重计划，控制总热量摄入，增加有氧运动，逐步改善健康状况。';
+  }
+  
+  // 分析饮食结构
+  let dietStructure = '';
+  let dietRecommendation = '';
+  
+  if (dietList.length === 0) {
+    dietStructure = '今日尚未记录任何饮食。';
+    dietRecommendation = '建议使用AI识食功能或节气食谱功能记录您的饮食，以便获得更精准的健康建议。';
+  } else {
+    const foodNames = dietList.map(item => item.name).join('、');
+    dietStructure = `今日饮食包括：${foodNames}。`;
+    
+    // 根据食物类型给出建议
+    const hasProtein = dietList.some(item => ['肉夹馍', '羊肉泡馍', '鸡蛋', '肉', '鱼', '鸡'].some(keyword => item.name.includes(keyword)));
+    const hasVegetables = dietList.some(item => ['蔬菜', '菜', '萝卜', '韭菜', '青团'].some(keyword => item.name.includes(keyword)));
+    const hasGrains = dietList.some(item => ['饼', '米皮', '饺子', '粥', '面'].some(keyword => item.name.includes(keyword)));
+    
+    if (!hasProtein) {
+      dietRecommendation += '建议增加蛋白质食物的摄入，如肉类、蛋类、豆制品等。';
+    }
+    if (!hasVegetables) {
+      dietRecommendation += '建议增加蔬菜摄入，以补充维生素和纤维素。';
+    }
+    if (!hasGrains) {
+      dietRecommendation += '建议适当摄入主食，保证碳水化合物供应。';
+    }
+    
+    if (dietRecommendation === '') {
+      dietRecommendation = '饮食结构较为均衡，建议继续保持。';
+    }
+  }
+  
+  // 基于历史数据的趋势分析
+  let trendAnalysis = '';
+  if (historicalData.length > 0) {
+    const recentData = historicalData.slice(-7); // 最近7天数据
+    const avgWeight = recentData.reduce((sum, item) => sum + parseFloat(item.weight || 0), 0) / recentData.length;
+    const avgCalories = recentData.reduce((sum, item) => sum + parseInt(item.calories || 0), 0) / recentData.length;
+    
+    if (avgWeight > userInfo.weight) {
+      trendAnalysis = `最近一周平均体重为${avgWeight.toFixed(1)}kg，呈下降趋势，说明您的减重计划可能正在见效。`;
+    } else if (avgWeight < userInfo.weight) {
+      trendAnalysis = `最近一周平均体重为${avgWeight.toFixed(1)}kg，呈上升趋势，可能需要调整饮食和运动计划。`;
+    } else {
+      trendAnalysis = `最近一周体重保持稳定，说明您的饮食和运动习惯较为稳定。`;
+    }
+  } else {
+    trendAnalysis = '暂无历史数据进行趋势分析。';
+  }
+  
+  // 生成陕西文化贴士
+  const seasonalTips = [
+    '陕西传统饮食注重五味调和，今日推荐搭配一些时令蔬菜，如春季的韭菜、夏季的冬瓜等。',
+    '根据节气养生，当前时节适合清淡饮食，避免过于油腻，可适当食用一些具有地方特色的养生食材。',
+    '陕西人有"冬吃萝卜夏吃姜"的养生智慧，根据季节调整饮食结构，有助于身体健康。',
+    '传统陕西美食如肉夹馍、凉皮等虽美味，但需注意搭配蔬菜，保证营养均衡。'
+  ];
+  
+  const randomSeasonalTip = seasonalTips[Math.floor(Math.random() * seasonalTips.length)];
+  
+  // 返回详细的健康报告对象
+  return {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    summary: calorieAssessment,
+    overallAssessment: {
+      title: '总体评估',
+      content: calorieAssessment
+    },
+    bmiAssessment: {
+      title: 'BMI健康评估',
+      content: bmiAssessment
+    },
+    dietAnalysis: {
+      title: '饮食结构分析',
+      content: dietStructure
+    },
+    trendAnalysis: {
+      title: '健康趋势分析',
+      content: trendAnalysis
+    },
+    recommendations: [
+      {
+        title: '热量摄入建议',
+        content: calorieRecommendation
+      },
+      {
+        title: 'BMI健康建议',
+        content: bmiRecommendation
+      },
+      {
+        title: '饮食结构建议',
+        content: dietRecommendation
+      }
+    ],
+    nutrition: {
+      protein: estimatedProtein,
+      carbs: estimatedCarbs,
+      fat: estimatedFat,
+      calories: totalCalories
+    },
+    culturalTips: [
+      randomSeasonalTip,
+      '陕西饮食文化博大精深，合理搭配传统美食与现代营养学知识，有助于实现健康目标。',
+      '根据个人体质和季节变化选择合适的陕西传统美食，既满足味蕾又维护健康。'
+    ],
+    personalizedInsights: {
+      title: '个性化洞察',
+      content: `基于您的个人数据（BMI: ${userInfo.bmi}, 目标热量: ${userInfo.targetCalories}kcal）和今日饮食记录，系统为您生成了这份个性化健康报告。`
+    }
+  };
+};
+
+// ==========================================
+// 4. 页面组件
 // ==========================================
 
 // --- 首页 ---
@@ -1068,6 +1230,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
   
   const safeList = Array.isArray(dietList) ? dietList : [];
   const userInfo = db.getUserInfo();
+  const historicalData = db.getHistoricalData();
   const baseCalories = 1240;
   const addedCalories = safeList.reduce((acc, cur) => acc + (cur.calories || 0), 0);
   const totalCalories = baseCalories + addedCalories;
@@ -1083,26 +1246,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
     
     // 模拟AI生成报告的过程
     setTimeout(() => {
-      const newReport = {
-        id: Date.now(),
-        date: new Date().toISOString(),
-        summary: `根据您今日的饮食情况，总热量摄入${totalCalories}kcal，占目标${Math.round((totalCalories / userInfo.targetCalories) * 100)}%。`,
-        recommendations: [
-          `您今日摄入的热量为${totalCalories}kcal，${totalCalories > userInfo.targetCalories ? '略高于' : '符合'}目标摄入量${userInfo.targetCalories}kcal。`,
-          '建议增加蔬菜摄入，保持营养均衡。',
-          '继续保持良好的饮食习惯。'
-        ],
-        nutrition: {
-          protein: Math.floor(totalCalories * 0.15), // 假设蛋白质占15%
-          carbs: Math.floor(totalCalories * 0.55),   // 假设碳水化合物占55%
-          fat: Math.floor(totalCalories * 0.30)      // 假设脂肪占30%
-        },
-        culturalTips: [
-          '陕西传统饮食注重五味调和，今日推荐搭配一些时令蔬菜。',
-          '根据节气养生，当前时节适合清淡饮食，避免过于油腻。'
-        ]
-      };
-      
+      const newReport = generateAIHealthReport(userInfo, safeList, historicalData);
       const updatedReports = db.addHealthReport(newReport);
       setHealthReports(updatedReports);
       setIsGeneratingReport(false);
@@ -1277,7 +1421,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl max-w-2xl w-full max-h-90vh overflow-y-auto shadow-2xl"
+            className="bg-white rounded-2xl max-w-4xl w-full max-h-5/6 overflow-y-auto shadow-2xl"
           >
             <div className="p-8">
               <div className="flex justify-between items-start mb-6">
@@ -1295,41 +1439,75 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
                 </button>
               </div>
               
+              {/* 个性化洞察 */}
+              {selectedReport.personalizedInsights && (
+                <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">{selectedReport.personalizedInsights.title}</h3>
+                  <p className="text-blue-700">{selectedReport.personalizedInsights.content}</p>
+                </div>
+              )}
+              
+              {/* 总体评估 */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">总体评估</h3>
-                <p className="text-gray-700">{selectedReport.summary}</p>
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">{selectedReport.overallAssessment.title}</h3>
+                <p className="text-gray-700">{selectedReport.overallAssessment.content}</p>
               </div>
               
+              {/* BMI健康评估 */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">{selectedReport.bmiAssessment.title}</h3>
+                <p className="text-gray-700">{selectedReport.bmiAssessment.content}</p>
+              </div>
+              
+              {/* 饮食结构分析 */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">{selectedReport.dietAnalysis.title}</h3>
+                <p className="text-gray-700">{selectedReport.dietAnalysis.content}</p>
+              </div>
+              
+              {/* 健康趋势分析 */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">{selectedReport.trendAnalysis.title}</h3>
+                <p className="text-gray-700">{selectedReport.trendAnalysis.content}</p>
+              </div>
+              
+              {/* 营养分析 */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">营养分析</h3>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg text-center">
-                    <div className="text-2xl font-bold text-blue-600">{selectedReport.nutrition.protein}g</div>
-                    <div className="text-sm text-gray-600">蛋白质</div>
+                    <div className="text-2xl font-bold text-blue-600">{selectedReport.nutrition.calories}kcal</div>
+                    <div className="text-sm text-gray-600">总热量</div>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg text-center">
-                    <div className="text-2xl font-bold text-green-600">{selectedReport.nutrition.carbs}g</div>
-                    <div className="text-sm text-gray-600">碳水化合物</div>
+                    <div className="text-2xl font-bold text-green-600">{selectedReport.nutrition.protein}g</div>
+                    <div className="text-sm text-gray-600">蛋白质</div>
                   </div>
                   <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                    <div className="text-2xl font-bold text-yellow-600">{selectedReport.nutrition.fat}g</div>
+                    <div className="text-2xl font-bold text-yellow-600">{selectedReport.nutrition.carbs}g</div>
+                    <div className="text-sm text-gray-600">碳水化合物</div>
+                  </div>
+                  <div className="bg-red-50 p-4 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-red-600">{selectedReport.nutrition.fat}g</div>
                     <div className="text-sm text-gray-600">脂肪</div>
                   </div>
                 </div>
               </div>
               
+              {/* 健康建议 */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">健康建议</h3>
-                <ul className="space-y-2">
+                <div className="space-y-4">
                   {selectedReport.recommendations.map((rec, idx) => (
-                    <li key={idx} className="flex items-start">
-                      <div className="text-success mr-2">✓</div>
-                      <span className="text-gray-700">{rec}</span>
-                    </li>
+                    <div key={idx} className="border-l-4 border-success pl-4 py-1">
+                      <h4 className="font-medium text-gray-800">{rec.title}</h4>
+                      <p className="text-gray-700">{rec.content}</p>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
               
+              {/* 陕西文化贴士 */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">陕西文化贴士</h3>
                 <ul className="space-y-2">
@@ -1528,7 +1706,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 };
 
 // ==========================================
-// 4. 布局结构 (修改版：左侧导航 + 顶部标题栏)
+// 5. 布局结构 (修改版：左侧导航 + 顶部标题栏)
 // ==========================================
 
 // 侧边栏按钮组件

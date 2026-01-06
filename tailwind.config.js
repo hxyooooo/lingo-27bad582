@@ -7,32 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#5B8DEF',      // 浅青花蓝
-        'primary-light': '#E6F0FF',
-        'primary-dark': '#2E66E0',
-        secondary: '#8B5FBF',    // 淡紫罗兰
-        'secondary-light': '#F5EEFF',
-        'secondary-dark': '#6D4C9A',
-        success: '#52C41A',      // 浅松绿
-        'success-light': '#E6FFE6',
-        'success-dark': '#3D8C13',
-        warning: '#FAAD14',      // 淡赭石
-        'warning-light': '#FFF7E6',
-        'warning-dark': '#D48800',
-        error: '#F5222D',        // 薄朱砂
-        'error-light': '#FFE6E6',
-        'error-dark': '#D9363E',
-        info: '#177DDC',         // 深天青
-        'info-light': '#E6F7FF',
-        'info-dark': '#095CB5',
-        background: '#F8FAFC',   // 浅米白
-        surface: '#FFFFFF',      // 洁白
-        text: '#262626',         // 深灰
-        'text-secondary': '#595959',
-        'text-tertiary': '#8C8C8C',
-        border: '#D9D9D9',       // 浅灰
-        'border-light': '#F0F0F0'
-      }
+        primary: {
+          DEFAULT: '#4A90E2', // 浅青花蓝
+          light: '#D6E4F0',   // 浅青花蓝浅色
+          dark: '#357ABD',    // 浅青花蓝深色
+        },
+        secondary: {
+          DEFAULT: '#D2691E', // 淡赭石色
+          light: '#E8C4A8',   // 淡赭石色浅色
+          dark: '#A0522D',    // 淡赭石色深色
+        },
+        success: {
+          DEFAULT: '#52C41A', // 浅松绿
+          light: '#D9F7BE',   // 浅松绿浅色
+          dark: '#389E0D',    // 浅松绿深色
+        },
+        warning: {
+          DEFAULT: '#FAAD14', // 淡藤黄
+          light: '#FFFBE6',   // 淡藤黄浅色
+          dark: '#D48806',    // 淡藤黄深色
+        },
+        error: {
+          DEFAULT: '#F5222D', // 铁红
+          light: '#FFECE8',   // 铁红浅色
+          dark: '#CF1322',    // 铁红深色
+        },
+        background: '#F5F7FA', // 淡月白
+        info: '#177DDC',      // 浅天青
+        light: '#FAFBFC',     // 淡云白
+        dark: '#0A0A0A',      // 墨色
+      },
     },
   },
   plugins: [],
