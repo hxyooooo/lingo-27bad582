@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff } from 'lucide-react';
 
 // ==========================================
@@ -580,6 +580,174 @@ const PersonalCenterView = ({ dietList = [] }) => {
   );
 };
 
+// --- [新增] AI助手对话组件 ---
+const AIAssistant = ({ isOpen, onClose }) => {
+  const [messages, setMessages] = useState([
+    { id: 1, type: 'assistant', content: '您好！我是您的AI健康饮食助手，专注于陕西传统文化与健康饮食的结合。我可以为您提供饮食建议、文化知识、节气食谱等信息。有什么我可以帮您的吗？' }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  // 滚动到底部
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // 模拟AI回复
+  const getAIResponse = (userMessage) => {
+    const lowerMsg = userMessage.toLowerCase();
+    
+    // 针对陕西饮食文化的回复
+    if (lowerMsg.includes('陕西') || lowerMsg.includes('文化') || lowerMsg.includes('非遗')) {
+      return '陕西有着丰富的饮食文化，比如腊汁肉夹馍、羊肉泡馍、秦镇米皮等都是陕西省非物质文化遗产。这些美食不仅美味，还承载着深厚的历史文化内涵。';
+    }
+    
+    // 针对节气饮食的回复
+    if (lowerMsg.includes('节气') || lowerMsg.includes('季节') || lowerMsg.includes('饮食')) {
+      return '根据二十四节气调整饮食是中医养生的重要理念。比如立春宜吃春饼，清明宜吃青团，大暑宜喝绿豆汤，冬至宜吃饺子。这些传统食俗既符合时令特点，又有利于身体健康。';
+    }
+    
+    // 针对健康饮食的回复
+    if (lowerMsg.includes('健康') || lowerMsg.includes('营养') || lowerMsg.includes('热量')) {
+      return '健康饮食需要均衡搭配，适量摄入蛋白质、碳水化合物和脂肪。陕西传统美食中，肉夹馍提供蛋白质，米皮富含碳水化合物，搭配蔬菜可以实现营养均衡。';
+    }
+    
+    // 针对AI识食的回复
+    if (lowerMsg.includes('拍照') || lowerMsg.includes('识别') || lowerMsg.includes('菜品')) {
+      return '您可以使用我们的AI识食功能，只需上传一张陕西传统美食的图片，系统就能识别菜品名称、热量和制作方法。非常方便！';
+    }
+    
+    // 默认回复
+    return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配等方面的问题。';
+  };
+
+  const handleSendMessage = () => {
+    if (inputValue.trim() === '') return;
+    
+    // 添加用户消息
+    const newUserMessage = {
+      id: Date.now(),
+      type: 'user',
+      content: inputValue
+    };
+    
+    setMessages(prev => [...prev, newUserMessage]);
+    setInputValue('');
+    setIsTyping(true);
+    
+    // 模拟AI回复延迟
+    setTimeout(() => {
+      const aiResponse = {
+        id: Date.now() + 1,
+        type: 'assistant',
+        content: getAIResponse(inputValue)
+      };
+      setMessages(prev => [...prev, aiResponse]);
+      setIsTyping(false);
+    }, 1000);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-2xl h-5/6 flex flex-col shadow-2xl">
+        {/* 顶部栏 */}
+        <div className="bg-primary text-white p-4 rounded-t-2xl flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="bg-white bg-opacity-20 w-10 h-10 rounded-full flex items-center justify-center">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="m-0 text-lg font-bold">AI健康饮食助手</h3>
+              <p className="m-0 text-xs opacity-80">专注于陕西传统文化与健康饮食</p>
+            </div>
+          </div>
+          <button 
+            onClick={onClose}
+            className="text-white bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            ×
+          </button>
+        </div>
+        
+        {/* 消息区域 */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                    message.type === 'user' 
+                      ? 'bg-primary text-white rounded-tr-none' 
+                      : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
+                  }`}
+                >
+                  {message.content}
+                </div>
+              </div>
+            ))}
+            
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-white text-gray-800 px-4 py-2 rounded-2xl rounded-tl-none border border-gray-200">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </div>
+        
+        {/* 输入区域 */}
+        <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="flex gap-2">
+            <textarea
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="输入您的问题..."
+              className="flex-1 border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              rows="2"
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={inputValue.trim() === ''}
+              className={`bg-primary text-white px-6 rounded-xl flex items-center justify-center ${
+                inputValue.trim() === '' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+              }`}
+            >
+              <span className="font-bold">发送</span>
+            </button>
+          </div>
+          <div className="text-xs text-gray-500 mt-2">
+            您可以询问陕西非遗美食、节气饮食、营养搭配等相关问题
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ==========================================
 // 3. 布局结构 (修改版：左侧导航 + 顶部标题栏)
 // ==========================================
@@ -602,6 +770,7 @@ const SidebarItem = ({ label, icon, active, onClick }) => (
 function App() {
   const [activePage, setActivePage] = useState('home');
   const [dietList, setDietList] = useState([]);
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
 
   // 通用添加方法（保持功能不变）
   const handleAddToDiet = (foodItem) => {
@@ -675,11 +844,19 @@ function App() {
         </main>
       </div>
       
-      {/* 悬浮助手按钮 (保持不变) */}
-      <div className="fixed bottom-10 right-10 bg-success text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center gap-2 z-40 font-bold">
+      {/* 悬浮助手按钮 */}
+      <div 
+        onClick={() => setIsAIAssistantOpen(true)}
+        className="fixed bottom-10 right-10 bg-success text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center gap-2 z-40 font-bold hover:bg-success-dark transition-colors"
+      >
         <span>✨</span> AI助手
       </div>
 
+      {/* AI助手对话框 */}
+      <AIAssistant 
+        isOpen={isAIAssistantOpen} 
+        onClose={() => setIsAIAssistantOpen(false)} 
+      />
     </div>
   );
 }
