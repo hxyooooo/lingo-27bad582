@@ -1655,63 +1655,52 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
   // 调用智能体API
   // ✅ 根据你的 curl 命令修改后的函数
-const callAPI = async (userMessage, imageUrls = []) => {
-  // 1. 你的 API 地址
-  const API_URL = "coze-api/stream_run";
-  
-  // 2. 你的 Token (请把之前那个很长的 eyJ... 开头的 Token 填在这里)
-  // 如果找不到，请去页面右上角的“管理 API Token”重新生成一个
-  const API_TOKEN = "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A";
-
+// 定义 API 调用函数
+const callAPI = async (userMessage: string) => {
   try {
-    const response = await fetch(API_URL, {
+    // 1. 设置相对路径，利用 Vite 代理转发
+    // 注意：不要加 https://api.coze.cn，也不要加前面的斜杠 /
+    const url = 'coze-api/open_api/v2/chat'; 
+
+    // 2. 准备请求头
+    const headers = {
+      'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A', 
+      'Content-Type': 'application/json',
+      'Accept': '*/*', // 接受所有返回类型
+    };
+
+    // 3. 准备请求体 (根据 Coze 文档)
+    const body = JSON.stringify({
+      "bot_id": "7592463172397776937", 
+      "user": "unique_user_id",
+      "query": userMessage,
+      "stream": false // 暂时先关掉流式，确保能通
+    });
+
+    console.log("正在发送请求到:", url);
+
+    // 4. 发起原生 Fetch 请求 (不会报 unsafe header 错)
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': API_TOKEN
-      },
-      // 3. 严格匹配 Curl 的数据结构
-      body: JSON.stringify({
-        project_id: 7592463172397776937, // 你的 Project ID
-        type: "query",
-        content: {
-          query: {
-            prompt: [
-              {
-                type: "text",
-                content: {
-                  text: userMessage // 这里填入用户的输入
-                }
-              }
-            ]
-          }
-        }
-      })
+      headers: headers,
+      body: body
     });
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`请求失败: ${response.status} - ${errorText}`);
     }
 
-    // 4. 处理返回结果
-    // 注意：stream_run 可能会返回流式文本，也可能返回 JSON
-    const text = await response.text();
-    console.log("原始返回:", text);
-
-    try {
-      const data = JSON.parse(text);
-      // 根据你的 Python 代码逻辑，结果可能在不同的字段里
-      // 常见的字段有 data.output, data.result, data.message 等
-      // 请先看控制台打印出来的结构
-      return data.output || data.message || data.result || JSON.stringify(data);
-    } catch (e) {
-      // 如果不是 JSON，直接返回文本
-      return text;
-    }
+    const data = await response.json();
+    console.log("API 返回成功:", data);
+    
+    // 根据返回格式提取回复，通常在 messages 里
+    // 注意：这里需要根据实际返回结构调整
+    return data.messages?.[0]?.content || "收到回复，但格式解析失败";
 
   } catch (error) {
-    console.error('API调用失败:', error);
-    return `请求出错：${error.message}`;
+    console.error("API 调用严重错误:", error);
+    return "API 调用出错，请按 F12 查看控制台详情";
   }
 };
 
