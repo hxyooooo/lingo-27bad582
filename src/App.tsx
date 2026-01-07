@@ -530,7 +530,37 @@ const HomeView = ({ toPage }) => (
   </div>
 );
 
-import { callIntelligentAgentAPI } from 'https://7kf89hm5y6.coze.site/stream_run'; // 根据实际文件路径调整
+// ✅ 在文件顶部添加这个函数（替换掉原来的 import）
+const callIntelligentAgentAPI = async (userMessage) => {
+  try {
+    const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 注意：这里需要替换为你真实的 Token，如果没有 Token 可能会由后端处理鉴权
+        'Authorization': 'Bearer YOUR_API_TOKEN_HERE' 
+      },
+      body: JSON.stringify({
+        user_id: "user123",
+        query: userMessage,
+        stream: false,
+        conversation_id: "",
+        attachments: []
+      })
+    });
+    
+    // 如果接口返回流式数据或JSON，需要根据实际情况解析
+    // 这里假设直接返回 JSON 文本，根据实际 Coze API 调整
+    const data = await response.json();
+    // 假设返回结构中 data.content 是回复内容，请根据实际接口响应调整
+    return data.content || JSON.stringify(data);
+    
+  } catch (error) {
+    console.error('API调用失败:', error);
+    return '抱歉，AI 暂时无法响应，请检查网络或配置。';
+  }
+};
+
 
 // --- [修改后] AI识食 ---
 const RecognitionView = ({ onAdd }) => {
@@ -568,7 +598,7 @@ const RecognitionView = ({ onAdd }) => {
             
             // 调用Coze智能体获取更详细的分析
             try {
-              const analysisResult = await callIntelligentAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
+              const analysisResult = await callCozeAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
               setAiAnalysis(analysisResult);
             } catch (error) {
               console.error('AI分析失败:', error);
