@@ -1661,12 +1661,14 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
 // 在 AIAssistant 组件内部
 // App.tsx - 完整配置
-const API_BASE_URL = '/';  // 或 '/api'，取决于Web IDE配置
+// App.tsx
 
 // API调用函数
 const callAPI = async (userMessage: string) => {
   try {
-    // 🟢 指向 Vite 代理，Vite 会转发给 Python 后端
+    // 🟢 指向 Vite 代理路径
+    // 浏览器会请求: http://lingo.console.aliyun.com/.../api/run
+    // Vite 会转发给: http://127.0.0.1:8000/run
     const API_URL = '/api/run'; 
     
     console.log("正在请求后端:", API_URL);
@@ -1676,32 +1678,40 @@ const callAPI = async (userMessage: string) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      // 🟢 格式要匹配 main.py 里的接收格式
+      // 🟢 确保这里的结构符合 Python main.py 的要求
       body: JSON.stringify({
         messages: [{ content: userMessage }]
       })
     });
 
     if (!response.ok) {
+      // 处理 404 或 500 错误
       const errText = await response.text();
       throw new Error(`后端报错 ${response.status}: ${errText}`);
     }
 
     const data = await response.json();
-    console.log("后端返回:", data);
+    console.log("后端返回原始数据:", data);
     
-    // 根据 main.py 的返回结构取数据
-    // 注意：这里需要根据你的 Python 代码实际返回来调整
-    // 假设 Python 直接透传了 Coze 的返回：
-    return JSON.stringify(data); 
+    // 🟢 数据处理建议：
+    // 假设后端返回结构是: { "role": "assistant", "content": "你好，我是AI", ... }
+    // 如果你想直接显示文本，应该 return data.content
+    // 如果你不确定结构，先用 stringify 调试也没问题
+    if (data.content) {
+        return data.content;
+    } else if (data.choices && data.choices[0]) {
+        // 兼容 OpenAI 格式
+        return data.choices[0].message.content;
+    } else {
+        // 兜底：返回整个 JSON 字符串
+        return JSON.stringify(data, null, 2); 
+    }
 
   } catch (error: any) {
-    console.error("请求失败:", error);
-    return `错误: ${error.message}`;
+    console.error("请求失败详情:", error);
+    return `系统错误: ${error.message}`;
   }
 };
-
-
     
 
 
