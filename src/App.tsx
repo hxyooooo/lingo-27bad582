@@ -1635,7 +1635,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
   );
 };
 
-// --- [新增] AI助手对话组件 ---
+// --- [修复] AI助手对话组件 ---
 const AIAssistant = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     { id: 1, type: 'assistant', content: '您好！我是您的AI健康饮食助手，专注于陕西传统文化与健康饮食的结合。我可以为您提供饮食建议、文化知识、节气食谱等信息。有什么我可以帮您的吗？' }
@@ -1653,7 +1653,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-  // 模拟API调用
+  // 调用智能体API
   const callAPI = async (userMessage) => {
     try {
       // 这里调用智能体API
