@@ -1661,19 +1661,16 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
 // 在 AIAssistant 组件内部
 // App.tsx - 完整配置
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = '/';  // 或 '/api'
 
-const callAPI = async (userMessage, imageUrls = []) => {
-  try {
-    let content;
-    if (imageUrls.length > 0) {
-      content = [
-        { type: 'text', text: userMessage },
-        ...imageUrls.map(url => ({ type: 'image_url', image_url: { url } }))
-      ];
-    } else {
-      content = userMessage;
-    }
+async function callAPI(messages) {
+    const response = await fetch('/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages })
+    });
+    return await response.json();
+}
 
     const response = await fetch(`${API_BASE_URL}/run`, {
       method: 'POST',
