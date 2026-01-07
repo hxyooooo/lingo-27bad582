@@ -1665,7 +1665,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
         attachments: [] // 暂时没有附件
       };
 
-      const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
+      const response = await fetch('http://47.86.161.122:8000', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
