@@ -1661,15 +1661,26 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
 // 在 AIAssistant 组件内部
 // App.tsx - 完整配置
-const API_BASE_URL = '/';  // 或 '/api'
+const API_BASE_URL = '/';  // 或 '/api'，取决于Web IDE配置
 
+// API调用函数
 async function callAPI(messages) {
-    const response = await fetch('/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages })
-    });
-    return await response.json();
+    try {
+        const response = await fetch(`${API_BASE_URL}/run`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('API调用失败:', error);
+        throw error;
+    }
 }
 
     const response = await fetch(`${API_BASE_URL}/run`, {
