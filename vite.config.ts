@@ -21,16 +21,13 @@ export default defineConfig({
     ],
 
     proxy: {
-      // 关键 3: 使用正则匹配。
-      // 不管前面有多少层路径(如 /_i/Itcak...), 只要包含 /coze-api 就进行代理
       '^.*/coze-api': {
-        target: 'https://api.coze.cn', // 确认你是用 .cn 还是 .com
+        target: 'https://api.coze.cn', // 代理要把请求转给这里
         changeOrigin: true,
         secure: false,
-        // 重写路径：把 /coze-api 之前的所有东西（包括 /coze-api 本身）都删掉，只发后面的给 Coze
         rewrite: (path) => path.replace(/^.*\/coze-api/, '')
       }
-    }
+		}
   }
 });
 
