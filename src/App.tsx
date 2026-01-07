@@ -1656,32 +1656,22 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // 调用智能体API
   const callAPI = async (userMessage, imageUrls = []) => {
     try {
-      const API_BASE_URL = 'http://localhost:8000'; // 或你的API地址
-      
-      // 构建消息内容
-      let content;
-      if (imageUrls.length > 0) {
-        content = [
-          { type: 'text', text: userMessage },
-          ...imageUrls.map(url => ({ type: 'image_url', image_url: { url } }))
-        ];
-      } else {
-        content = userMessage;
-      }
+      // 使用Coze智能体API，而不是本地API
+      const requestBody = {
+        user_id: "user123", // 可以根据需要生成用户ID
+        stream: false, // 非流式响应
+        query: userMessage,
+        conversation_id: "", // 空字符串表示新对话
+        attachments: [] // 暂时没有附件
+      };
 
-      const response = await fetch(`${API_BASE_URL}/run`, {
+      const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
         },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: 'user',
-              content: content
-            }
-          ]
-        })
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
@@ -1691,19 +1681,21 @@ const AIAssistant = ({ isOpen, onClose }) => {
       const data = await response.json();
       
       // 提取AI回复
-      if (data.messages && data.messages.length > 0) {
-        const assistantMsg = data.messages.find(msg => msg.role === 'assistant');
-        return assistantMsg?.content || '抱歉，我没有生成回复。';
+      if (data && data.message) {
+        return data.message;
+      } else if (data && data.content) {
+        return data.content;
+      } else {
+        // 如果响应格式不同，返回整个响应的字符串表示
+        return JSON.stringify(data);
       }
-      
-      return '抱歉，系统返回格式异常。';
       
     } catch (error) {
       console.error('API调用失败:', error);
       
       // 更详细的错误提示
       if (error.message.includes('Failed to fetch')) {
-        return '无法连接到服务器，请检查：\n1. 服务是否已启动（端口8000）\n2. 网络连接是否正常\n3. 是否存在跨域问题';
+        return '无法连接到服务器，请检查：\n1. 服务是否已启动\n2. 网络连接是否正常\n3. 是否存在跨域问题';
       }
       
       return `抱歉，系统暂时无法提供服务。错误：${error.message}`;
