@@ -1673,13 +1673,13 @@ const callAPI = async (userMessage: string) => {
       method: 'POST',
       headers: {
         // 请替换为你的真实 Token
-        'Authorization': 'Bearer pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A', 
         'Content-Type': 'application/json',
         'Accept': '*/*'
       },
       // 请求体
       body: JSON.stringify({
-        "bot_id": "73xxxxxxxxxxxxxx", // 请替换为你的 Bot ID
+        "bot_id": "7592463172397776937", // 请替换为你的 Bot ID
         "user": "user_123",
         "query": userMessage,
         "stream": false // 先关闭流式，确保能通
