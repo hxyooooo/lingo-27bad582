@@ -1657,7 +1657,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // ✅ 根据你的 curl 命令修改后的函数
 const callAPI = async (userMessage, imageUrls = []) => {
   // 1. 你的 API 地址
-  const API_URL = "https://7kf89hm5y6.coze.site/stream_run";
+  const API_URL = "/coze-api/stream_run";
   
   // 2. 你的 Token (请把之前那个很长的 eyJ... 开头的 Token 填在这里)
   // 如果找不到，请去页面右上角的“管理 API Token”重新生成一个
