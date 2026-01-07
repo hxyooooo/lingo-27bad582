@@ -1657,47 +1657,55 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // ✅ 根据你的 curl 命令修改后的函数
 // 定义 API 调用函数
   // 调用智能体API - 修正版
-const callAPI = async (userMessage) => {
+// 确保删除所有 Coze SDK 的引用！只保留 React 相关的
+
+const callAPI = async (userMessage: string) => {
   try {
-    // 使用正确的代理路径（前面加 /）
-    const url = '/api/coze/open_api/v2/chat';
+    // 🔴 重点1：绝对不能写 https://api.coze.cn
+    // 🟢 重点2：必须用 /coze-api 开头，触发 vite 的代理
+    // 这里对应的是 Coze 的 /open_api/v2/chat 接口
+    const API_URL = '/coze-api/open_api/v2/chat'; 
 
-    const headers = {
-      'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A',
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    };
+    console.log("准备发送请求到:", API_URL);
 
-    const body = JSON.stringify({
-      "bot_id": "7592463172397776937",
-      "user": "unique_user_id",
-      "query": userMessage,
-      "stream": false
-    });
-
-    console.log("正在发送请求到:", url);
-
-    const response = await fetch(url, {
+    // 🔴 重点3：Headers 里绝对不能有 User-Agent 或 sec-ch-ua
+    const response = await fetch(API_URL, {
       method: 'POST',
-      headers: headers,
-      body: body
+      headers: {
+        // 请替换为你的真实 Token
+        'Authorization': 'Bearer pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
+      },
+      // 请求体
+      body: JSON.stringify({
+        "bot_id": "73xxxxxxxxxxxxxx", // 请替换为你的 Bot ID
+        "user": "user_123",
+        "query": userMessage,
+        "stream": false // 先关闭流式，确保能通
+      })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`请求失败: ${response.status} - ${errorText}`);
+      // 如果这里报 404，说明代理配置没生效（重启服务）
+      // 如果这里报 401，说明 Token 填错了
+      throw new Error(`API 错误 ${response.status}: ${errorText}`);
     }
 
     const data = await response.json();
-    console.log("API 返回成功:", data);
+    console.log("API 返回结果:", data);
     
-    return data.messages?.[0]?.content || "收到回复，但格式解析失败";
+    // 解析返回内容 (根据 Coze v2 接口结构)
+    const reply = data.messages?.find(msg => msg.type === 'answer')?.content || "收到回复，但格式解析失败";
+    return reply;
 
   } catch (error) {
-    console.error("API 调用严重错误:", error);
-    return "API 调用出错: " + error.message;
+    console.error("请求失败详情:", error);
+    return `发送失败: ${error.message}`;
   }
 };
+
 
 
 
