@@ -1842,7 +1842,28 @@ const callAPI = async (userMessage, imageUrls = []) => {
                 </div>
               </div>
             ))}
-            
+
+						{/* ✅ 新增：AI思考时的加载提示 */}
+						{isTyping && (
+  						<div className="flex justify-start">
+    						{/* 头像 */}
+    						<div className="bg-white bg-opacity-20 w-10 h-10 rounded-full flex items-center justify-center mr-3 flex-shrink-0 border border-gray-200">
+       						<span className="text-xl">🤖</span>
+    						</div>
+    						{/* 气泡 */}
+    						<div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-500 flex items-center gap-2">
+      						<span>AI正在思考中</span>
+      						{/* 简单的跳动点动画 */}
+      						<span className="flex gap-1">
+        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
+        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
+      						</span>
+    						</div>
+  						</div>
+						)}
+
+						
             {isTyping && (
               <div className="flex justify-start">
                 <div className="bg-white text-gray-800 px-4 py-2 rounded-2xl rounded-tl-none border border-gray-200">
