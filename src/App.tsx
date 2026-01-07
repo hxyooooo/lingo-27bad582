@@ -1655,52 +1655,67 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
   // 调用智能体API
   const callAPI = async (userMessage, imageUrls = []) => {
-    try {
-      // 使用Coze智能体API，而不是本地API
-      const requestBody = {
-        user_id: "user123", // 可以根据需要生成用户ID
-        stream: false, // 非流式响应
-        query: userMessage,
-        conversation_id: "", // 空字符串表示新对话
-        attachments: [] // 暂时没有附件
-      };
-			const API_BASE_URL = 'http://47.86.161.122:3000' ;
-      const response = await fetch('http://47.86.161.122:8000', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
-        },
-        body: JSON.stringify(requestBody)
-      });
+  // 1. 这里填入你的 Coze Bot ID (纯数字字符串)
+  const BOT_ID = "759246317239776937"; 
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
+  // 2. 使用你的 Token (保留你原来的，或者换成 pat_ 开头的)
+  const TOKEN = "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg3MTE5LCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTg3ODY0NjU1NzkwMDk5In0.EA968dbcYjJ4GJuC2TwAl9vLibrIAbJyslHKblKs9fr0g-NS7seqjxIrGMsf8omoVcwrHPrepF-jenBNebgi1NqlBN2jl2u8CBiEWRznJ551CO4Tf77JvS5oC4oXjOWTy434vjU6IOYhPWwX3oQPqmojQYDxJma7chzoCAAEKSf-n-V-va7Si-YFDb53nXD1Xm_8yywBR58laIYp3UUnId8tm9SUOJXPEE2YfEMhfak5xely8lw_es8W0yrg6KQ6ui2UpFRdu4u2MnXqVGOuBeBS50Ue_8CZ5LuvsktN6XOtLXk0YP5qyRFOdYTS9UWEjxGwMZCdDsYSa9tsdFpL7g";
 
-      const data = await response.json();
-      
-      // 提取AI回复
-      if (data && data.message) {
-        return data.message;
-      } else if (data && data.content) {
-        return data.content;
-      } else {
-        // 如果响应格式不同，返回整个响应的字符串表示
-        return JSON.stringify(data);
-      }
-      
-    } catch (error) {
-      console.error('API调用失败:', error);
-      
-      // 更详细的错误提示
-      if (error.message.includes('Failed to fetch')) {
-        return '无法连接到服务器，请检查：\n1. 服务是否已启动\n2. 网络连接是否正常\n3. 是否存在跨域问题';
-      }
-      
-      return `抱歉，系统暂时无法提供服务。错误：${error.message}`;
+  // 3. Coze 官方 API 地址 (国内版)
+  const API_URL = 'https://api.coze.cn/v3/chat';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': TOKEN // 确保这里包含 Bearer 前缀
+      },
+      // 4. 符合 Coze V3 标准的请求体
+      body: JSON.stringify({
+        bot_id: BOT_ID,
+        user_id: "user_12345", // 唯一标识用户的ID，可随意指定
+        stream: false,         // 关闭流式，简化前端处理
+        auto_save_history: true,
+        additional_messages: [
+          {
+            role: "user",
+            content: userMessage,
+            content_type: "text"
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      console.error("Coze API Error:", errData);
+      throw new Error(`API Error: ${response.status} - ${errData.msg || response.statusText}`);
     }
-  };
+
+    const data = await response.json();
+    
+    // 5. 解析 V3 返回的数据结构
+    // Coze V3 非流式返回的数据通常在 data.data 数组中，类型为 'answer'
+    if (data.code === 0 && data.data) {
+      const answerMsg = data.data.find(msg => msg.type === 'answer');
+      if (answerMsg) {
+        return answerMsg.content;
+      }
+    }
+    
+    // 如果没找到标准回复，返回原始数据以供调试
+    return JSON.stringify(data);
+      
+  } catch (error) {
+    console.error('API调用失败:', error);
+    if (error.message.includes('Failed to fetch')) {
+      return '网络请求失败。可能是跨域(CORS)限制，请尝试配置 Vite 代理。';
+    }
+    return `抱歉，连接智能体失败：${error.message}`;
+  }
+};
+
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' && uploadedImages.length === 0) return;
