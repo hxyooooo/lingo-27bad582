@@ -274,7 +274,7 @@ const callCozeAgentAPI = async (userMessage) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzYxOTE0LCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDc5NjExMDUzNjcwNDE1In0.UTT0i3Z51fu-YhXhXelajhaa4bcS_f4XGWqaWmkPxQL1p4DhD8R9e5x9It1oekif6ZyTJZjRoxqtkQQA4lZpYQqWWfadxPkUYz7sDYyCVklgs5JJzR0MbabwbTy6jd9uA1uWAnIEVnsUAEd53LXldSMfO960wFive-pqwcWiLSphF6OwfFdGBDoSHV9N-Yvhr3xfHK_ustZDCnFb9fqYY90kySIQTFOIQ10AykZQM83R20Dov8852GIpsblk31JC7CgHVR0OaeW4WaljQgBmTNRMwNgxAZbyJQy9R4Yn_nPlFFojHXA0i03MFu2cUgbKXfK67l6teXC34S8VkUhIRw'
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
       },
       body: JSON.stringify(requestBody)
     });
@@ -302,7 +302,7 @@ const callCozeAgentAPI = async (userMessage) => {
   }
 };
 
-// 智能体API调用函数 - 保留原有功能，新增Coze集成
+// 智能体API调用函数 - 专门用于AI助手
 const callIntelligentAgentAPI = async (userMessage) => {
   // 调用Coze智能体
   return await callCozeAgentAPI(userMessage);
@@ -566,14 +566,9 @@ const RecognitionView = ({ onAdd }) => {
             setResult(randomDish);
             setStatus('success');
             
-            // 调用Coze智能体获取更详细的分析
-            try {
-              const analysisResult = await callCozeAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
-              setAiAnalysis(analysisResult);
-            } catch (error) {
-              console.error('AI分析失败:', error);
-              setAiAnalysis('AI分析暂时不可用，但已识别出菜品基本信息。');
-            }
+            // 使用模拟AI分析
+            const analysisResult = `这是${randomDish.name}，${randomDish.intro}。这道菜的营养价值包括蛋白质、碳水化合物和多种维生素。建议适量食用，搭配蔬菜以保持营养均衡。`;
+            setAiAnalysis(analysisResult);
           } else {
             setStatus('error');
             setAiAnalysis('');
