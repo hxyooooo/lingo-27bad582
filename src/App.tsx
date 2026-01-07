@@ -1642,9 +1642,9 @@ const AIAssistant = ({ isOpen, onClose }) => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]); // 存储上传的图片
   const messagesEndRef = useRef(null);
 
-  // 滚动到底部
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -1654,45 +1654,123 @@ const AIAssistant = ({ isOpen, onClose }) => {
   }, [messages]);
 
   // 调用智能体API
-  const callAPI = async (userMessage) => {
+  const callAPI = async (userMessage, imageUrls = []) => {
     try {
-      // 这里调用智能体API
-      const response = await callIntelligentAgentAPI(userMessage);
-      return response;
+      const API_BASE_URL = 'http://localhost:8000'; // 或你的API地址
+      
+      // 构建消息内容
+      let content;
+      if (imageUrls.length > 0) {
+        content = [
+          { type: 'text', text: userMessage },
+          ...imageUrls.map(url => ({ type: 'image_url', image_url: { url } }))
+        ];
+      } else {
+        content = userMessage;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/run`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: content
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      // 提取AI回复
+      if (data.messages && data.messages.length > 0) {
+        const assistantMsg = data.messages.find(msg => msg.role === 'assistant');
+        return assistantMsg?.content || '抱歉，我没有生成回复。';
+      }
+      
+      return '抱歉，系统返回格式异常。';
+      
     } catch (error) {
       console.error('API调用失败:', error);
-      return '抱歉，系统暂时无法提供服务，请稍后再试。';
+      
+      // 更详细的错误提示
+      if (error.message.includes('Failed to fetch')) {
+        return '无法连接到服务器，请检查：\n1. 服务是否已启动（端口8000）\n2. 网络连接是否正常\n3. 是否存在跨域问题';
+      }
+      
+      return `抱歉，系统暂时无法提供服务。错误：${error.message}`;
     }
   };
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() === '') return;
+    if (inputValue.trim() === '' && uploadedImages.length === 0) return;
     
     // 添加用户消息
     const newUserMessage = {
       id: Date.now(),
       type: 'user',
-      content: inputValue
+      content: inputValue,
+      images: uploadedImages // 如果有图片
     };
     
     setMessages(prev => [...prev, newUserMessage]);
     setInputValue('');
     setIsTyping(true);
     
-    // 调用智能体API获取回复
-    const aiResponse = await callAPI(inputValue);
-    
-    // 添加AI回复
-    const aiMessage = {
-      id: Date.now() + 1,
-      type: 'assistant',
-      content: aiResponse
-    };
-    
-    setMessages(prev => [...prev, aiMessage]);
-    setIsTyping(false);
+    try {
+      // 调用智能体API获取回复
+      const aiResponse = await callAPI(
+        inputValue, 
+        uploadedImages.map(img => img.url)
+      );
+      
+      // 添加AI回复
+      const aiMessage = {
+        id: Date.now() + 1,
+        type: 'assistant',
+        content: aiResponse
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      // 显示错误消息
+      const errorMessage = {
+        id: Date.now() + 1,
+        type: 'assistant',
+        content: `❌ 发生错误：${error.message}`
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+      setUploadedImages([]); // 清空上传的图片
+    }
   };
 
+  // 图片上传处理
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setUploadedImages(prev => [...prev, {
+          id: Date.now(),
+          url: event.target.result,
+          name: file.name
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // 其他代码保持不变...
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -1739,7 +1817,21 @@ const AIAssistant = ({ isOpen, onClose }) => {
                       : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
                   }`}
                 >
-                  {message.content}
+                  {/* 渲染图片 */}
+                  {message.images && message.images.length > 0 && (
+                    <div className="mb-2 flex gap-2 flex-wrap">
+                      {message.images.map(img => (
+                        <img 
+                          key={img.id}
+                          src={img.url}
+                          alt={img.name}
+                          className="max-w-full h-32 object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {/* 渲染文本内容 */}
+                  <div className="whitespace-pre-wrap">{message.content}</div>
                 </div>
               </div>
             ))}
@@ -1761,27 +1853,60 @@ const AIAssistant = ({ isOpen, onClose }) => {
         
         {/* 输入区域 */}
         <div className="p-4 border-t border-gray-200 bg-white">
+          {/* 图片预览 */}
+          {uploadedImages.length > 0 && (
+            <div className="mb-2 flex gap-2 flex-wrap">
+              {uploadedImages.map(img => (
+                <div key={img.id} className="relative">
+                  <img 
+                    src={img.url}
+                    alt={img.name}
+                    className="h-20 w-20 object-cover rounded-lg"
+                  />
+                  <button
+                    onClick={() => setUploadedImages(prev => prev.filter(i => i.id !== img.id))}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          
           <div className="flex gap-2">
+            {/* 图片上传按钮 */}
+            <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-xl px-3 flex items-center justify-center">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              📷
+            </label>
+            
             <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="输入您的问题..."
+              placeholder="输入您的问题，或上传食物图片..."
               className="flex-1 border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               rows="2"
             />
             <button
               onClick={handleSendMessage}
-              disabled={inputValue.trim() === ''}
+              disabled={inputValue.trim() === '' && uploadedImages.length === 0}
               className={`bg-primary text-white px-6 rounded-xl flex items-center justify-center ${
-                inputValue.trim() === '' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                (inputValue.trim() === '' && uploadedImages.length === 0) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
               }`}
             >
               <span className="font-bold">发送</span>
             </button>
           </div>
           <div className="text-xs text-gray-500 mt-2">
-            您可以询问陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等相关问题
+            💡 支持文本咨询和图片识别（上传食物图片分析营养）
           </div>
         </div>
       </div>
