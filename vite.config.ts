@@ -3,15 +3,16 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  // 关键 1: 设置基础路径为相对路径，适应云端子目录
+  base: './', 
+  
   server: {
     host: '0.0.0.0',
     port: 5173,
+    // 关键 2: 彻底关闭 HMR，根除 WebSocket 报错
+    hmr: false, 
     
-    // 👇👇👇 关键修改：彻底关闭热更新 (HMR) 👇👇👇
-    // 这会停止浏览器尝试建立 WebSocket 连接，彻底消除报错
-    hmr: false,
-
-    // 允许所有域名访问（防止 invalid host header 报错）
+    // 允许所有域名
     allowedHosts: [
       'lingo.console.aliyun.com',
       '.aliyun.com',
@@ -19,14 +20,18 @@ export default defineConfig({
       '127.0.0.1'
     ],
 
-    // API 代理配置（保持不变，这才是 AI 能用的关键）
     proxy: {
-      '/coze-api': {
-        target: 'https://api.coze.cn', // 如果你是用 coze.com 请改为 coze.com
+      // 关键 3: 使用正则匹配。
+      // 不管前面有多少层路径(如 /_i/Itcak...), 只要包含 /coze-api 就进行代理
+      '^.*/coze-api': {
+        target: 'https://api.coze.cn', // 确认你是用 .cn 还是 .com
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/coze-api/, '')
+        secure: false,
+        // 重写路径：把 /coze-api 之前的所有东西（包括 /coze-api 本身）都删掉，只发后面的给 Coze
+        rewrite: (path) => path.replace(/^.*\/coze-api/, '')
       }
     }
   }
 });
+
 
