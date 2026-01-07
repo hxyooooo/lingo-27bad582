@@ -1,21 +1,24 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-
+// vite.config.js
 export default defineConfig({
   plugins: [react()],
-  base: './', // 保证资源使用相对路径加载
+  base: './', 
   server: {
     host: '0.0.0.0',
     port: 5173,
-    // 🔴 彻底关闭热更新（HMR），解决 WebSocket 报错
     hmr: false, 
-    // 🔴 允许所有域名访问，解决 Blocked host 报错
-    allowedHosts: true,
+    allowedHosts: [
+      'lingo.console.aliyun.com', 
+      '.aliyun.com', 
+      'localhost'
+    ],
+    
+    // 👇👇 修改代理配置，使用标准前缀
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:8000',
+      '/api/coze': { // 👈 1. 改为以 / 开头的标准前缀
+        target: 'https://api.coze.cn',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/coze/, '') // 👈 2. 去掉前缀
       }
     }
   }
