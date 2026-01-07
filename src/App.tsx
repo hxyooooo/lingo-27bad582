@@ -1661,54 +1661,40 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
 const callAPI = async (userMessage: string) => {
   try {
-    // 🔴 重点1：绝对不能写 https://api.coze.cn
-    // 🟢 重点2：必须用 /coze-api 开头，触发 vite 的代理
-    // 这里对应的是 Coze 的 /open_api/v2/chat 接口
-    const API_URL = '/coze-api/open_api/v2/chat'; 
+    // 🟢 指向 Vite 代理，Vite 会转发给 Python 后端
+    const API_URL = '/api/run'; 
+    
+    console.log("正在请求后端:", API_URL);
 
-    console.log("准备发送请求到:", API_URL);
-
-    // 🔴 重点3：Headers 里绝对不能有 User-Agent 或 sec-ch-ua
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
-        // 请替换为你的真实 Token
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A', 
-        'Content-Type': 'application/json',
-        'Accept': '*/*'
+        'Content-Type': 'application/json'
       },
-      // 请求体
+      // 🟢 格式要匹配 main.py 里的接收格式
       body: JSON.stringify({
-        "bot_id": "7592463172397776937", // 请替换为你的 Bot ID
-        "user": "user_123",
-        "query": userMessage,
-        "stream": false // 先关闭流式，确保能通
+        messages: [{ content: userMessage }]
       })
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      // 如果这里报 404，说明代理配置没生效（重启服务）
-      // 如果这里报 401，说明 Token 填错了
-      throw new Error(`API 错误 ${response.status}: ${errorText}`);
+      const errText = await response.text();
+      throw new Error(`后端报错 ${response.status}: ${errText}`);
     }
 
     const data = await response.json();
-    console.log("API 返回结果:", data);
+    console.log("后端返回:", data);
     
-    // 解析返回内容 (根据 Coze v2 接口结构)
-    const reply = data.messages?.find(msg => msg.type === 'answer')?.content || "收到回复，但格式解析失败";
-    return reply;
+    // 根据 main.py 的返回结构取数据
+    // 注意：这里需要根据你的 Python 代码实际返回来调整
+    // 假设 Python 直接透传了 Coze 的返回：
+    return JSON.stringify(data); 
 
-  } catch (error) {
-    console.error("请求失败详情:", error);
-    return `发送失败: ${error.message}`;
+  } catch (error: any) {
+    console.error("请求失败:", error);
+    return `错误: ${error.message}`;
   }
 };
-
-
-
-
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' && uploadedImages.length === 0) return;
