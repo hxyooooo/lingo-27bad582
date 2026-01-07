@@ -3,23 +3,32 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // 相对路径
+  // 1. 确保资源加载使用相对路径
+  base: './', 
+  
   server: {
+    // 允许局域网访问
     host: '0.0.0.0',
     port: 5173,
-    hmr: false, // 彻底关闭 WebSocket，不再报错
-    allowedHosts: ['all'], // 允许所有
+    
+    // 2. 彻底关闭热更新，根除 WebSocket 报错
+    hmr: false, 
+
+    // 3. 👇👇👇 这里就是解决你刚才那个报错的关键 👇👇👇
+    allowedHosts: [
+      'lingo.console.aliyun.com', // 明确允许阿里云 IDE 域名
+      '.aliyun.com',              // 允许所有阿里云子域名
+      'localhost'
+    ],
+
+    // 4. 代理配置，解决 API 跨域
     proxy: {
-      // 只要路径里包含 coze-api，就走代理
       '^.*/coze-api': {
-        target: 'https://api.coze.cn', // 目标地址
-        changeOrigin: true,            // 必须为 true，欺骗后端
-        secure: false,                 // 接受无效证书
-        // 把路径中的 /.../coze-api 替换为空，只保留后面的 API 路径
+        target: 'https://api.coze.cn',
+        changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^.*\/coze-api/, '')
       }
     }
   }
 });
-
-
