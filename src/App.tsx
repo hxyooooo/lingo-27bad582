@@ -1659,42 +1659,53 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // 调用智能体API - 修正版
 // 确保删除所有 Coze SDK 的引用！只保留 React 相关的
 
-const callAPI = async (userMessage: string) => {
+// 在 AIAssistant 组件内部
+const callAPI = async (userMessage) => {
   try {
-    // 🟢 指向 Vite 代理，Vite 会转发给 Python 后端
-    const API_URL = 'http://127.0.0.1:8000'; 
-    
-    console.log("正在请求后端:", API_URL);
+    // 1. URL 必须以 / 开头，并且必须匹配 vite.config.js 里的代理前缀
+    // 👈 注意：这里必须是 /api/coze/...，不能是 coze-api/...
+    const url = '/api/coze/open_api/v2/chat'; 
 
-    const response = await fetch(API_URL, {
+    // 2. Headers
+    const headers = {
+      'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A', 
+      'Content-Type': 'application/json',
+      'Accept': '*/*'
+    };
+
+    // 3. Body - Coze API 需要的参数
+    const body = JSON.stringify({
+      "bot_id": "7592463172397776937", 
+      "user": "unique_user_id",
+      "query": userMessage, // 👈 这里传用户消息，对应 query 参数
+      "stream": false
+    });
+
+    console.log("正在发送请求到:", url);
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // 🟢 格式要匹配 main.py 里的接收格式
-      body: JSON.stringify({
-        messages: [{ content: userMessage }]
-      })
+      headers: headers,
+      body: body
     });
 
     if (!response.ok) {
-      const errText = await response.text();
-      throw new Error(`后端报错 ${response.status}: ${errText}`);
+      const errorText = await response.text();
+      throw new Error(`请求失败: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log("后端返回:", data);
+    console.log("API 返回成功:", data);
     
-    // 根据 main.py 的返回结构取数据
-    // 注意：这里需要根据你的 Python 代码实际返回来调整
-    // 假设 Python 直接透传了 Coze 的返回：
-    return JSON.stringify(data); 
+    // 4. 提取返回内容
+    return data.messages?.[0]?.content || "收到回复，但格式解析失败";
 
-  } catch (error: any) {
-    console.error("请求失败:", error);
-    return `错误: ${error.message}`;
+  } catch (error) {
+    console.error("API 调用严重错误:", error);
+    return "API 调用出错: " + error.message;
   }
 };
+
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' && uploadedImages.length === 0) return;
