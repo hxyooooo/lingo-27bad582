@@ -173,7 +173,7 @@ const heritageData = [
     category: '传统技艺 / 宝鸡',
     image: 'https://img95.699pic.com/photo/50160/3277.jpg_wh860.jpg',
     desc: '色彩艳丽，造型夸张，寓意驱邪避灾。',
-    detail: '凤翔泥塑汲取了古代石刻、年画、剪纸和刺绣的纹饰，造型夸张，色彩鲜艳，深受人们喜爱。其中以"挂虎"和"坐虎"最为典型，寓意驱邪避灾，吉祥如意。',
+    detail: '凤翔泥塑汲取了古代石刻、年画、剪纸和刺otto的纹饰，造型夸张，色彩鲜艳，深受人们喜爱。其中以"挂虎"和"坐虎"最为典型，寓意驱邪避灾，吉祥如意。',
     videoUrl: 'https://www.bilibili.com/video/BV1UW411M7Sg/'
   },
   {
@@ -254,49 +254,58 @@ const seasonalData = {
 };
 
 // ==========================================
-// 3. 智能体API调用函数
+// 3. Coze智能体API调用函数
 // ==========================================
 
-// 智能体API调用函数
+// Coze智能体API调用函数
+const callCozeAgentAPI = async (userMessage) => {
+  try {
+    // 构造请求体
+    const requestBody = {
+      user_id: "user123", // 可以根据需要生成用户ID
+      stream: false, // 非流式响应
+      query: userMessage,
+      conversation_id: "", // 空字符串表示新对话
+      attachments: [] // 暂时没有附件
+    };
+
+    // 发送请求到Coze智能体
+    const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzYxOTE0LCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDc5NjExMDUzNjcwNDE1In0.UTT0i3Z51fu-YhXhXelajhaa4bcS_f4XGWqaWmkPxQL1p4DhD8R9e5x9It1oekif6ZyTJZjRoxqtkQQA4lZpYQqWWfadxPkUYz7sDYyCVklgs5JJzR0MbabwbTy6jd9uA1uWAnIEVnsUAEd53LXldSMfO960wFive-pqwcWiLSphF6OwfFdGBDoSHV9N-Yvhr3xfHK_ustZDCnFb9fqYY90kySIQTFOIQ10AykZQM83R20Dov8852GIpsblk31JC7CgHVR0OaeW4WaljQgBmTNRMwNgxAZbyJQy9R4Yn_nPlFFojHXA0i03MFu2cUgbKXfK67l6teXC34S8VkUhIRw'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // 根据Coze API响应格式提取内容
+    // 假设响应中包含一个message字段
+    if (data && data.message) {
+      return data.message;
+    } else if (data && data.content) {
+      return data.content;
+    } else {
+      // 如果响应格式不同，返回整个响应的字符串表示
+      return JSON.stringify(data);
+    }
+  } catch (error) {
+    console.error('Coze API调用失败:', error);
+    // 返回错误信息，但不暴露具体错误细节给用户
+    return '很抱歉，AI助手暂时无法提供服务，请稍后再试。';
+  }
+};
+
+// 智能体API调用函数 - 保留原有功能，新增Coze集成
 const callIntelligentAgentAPI = async (userMessage) => {
-  // 模拟API调用延迟
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // 这里是模拟的API响应，实际应用中应该替换为真实的API调用
-  const lowerMsg = userMessage.toLowerCase();
-  
-  // 针对陕西饮食文化的回复
-  if (lowerMsg.includes('陕西') || lowerMsg.includes('文化') || lowerMsg.includes('非遗')) {
-    return '陕西有着丰富的饮食文化，比如腊汁肉夹馍、羊肉泡馍、秦镇米皮等都是陕西省非物质文化遗产。这些美食不仅美味，还承载着深厚的历史文化内涵。';
-  }
-  
-  // 针对节气饮食的回复
-  if (lowerMsg.includes('节气') || lowerMsg.includes('季节') || lowerMsg.includes('饮食')) {
-    return '根据二十四节气调整饮食是中医养生的重要理念。比如立春宜吃春饼，清明宜吃青团，大暑宜喝绿豆汤，冬至宜吃饺子。这些传统食俗既符合时令特点，又有利于身体健康。';
-  }
-  
-  // 针对健康饮食的回复
-  if (lowerMsg.includes('健康') || lowerMsg.includes('营养') || lowerMsg.includes('热量')) {
-    return '健康饮食需要均衡搭配，适量摄入蛋白质、碳水化合物和脂肪。陕西传统美食中，肉夹馍提供蛋白质，米皮富含碳水化合物，搭配蔬菜可以实现营养均衡。';
-  }
-  
-  // 针对AI识食的回复
-  if (lowerMsg.includes('拍照') || lowerMsg.includes('识别') || lowerMsg.includes('菜品')) {
-    return '您可以使用我们的AI识食功能，只需上传一张陕西传统美食的图片，系统就能识别菜品名称、热量和制作方法。非常方便！';
-  }
-  
-  // 针对历史数据的回复
-  if (lowerMsg.includes('历史') || lowerMsg.includes('数据') || lowerMsg.includes('统计')) {
-    return '您可以在个人中心的"历史数据统计"功能中查看和管理您的健康数据，包括体重、热量摄入等历史记录。这些数据有助于您更好地了解自己的健康状况和进步情况。';
-  }
-  
-  // 针对健康目标的回复
-  if (lowerMsg.includes('目标') || lowerMsg.includes('计划') || lowerMsg.includes('设定')) {
-    return '在个人中心的"健康目标设置"功能中，您可以设定个性化的健康目标，如体重管理、热量摄入控制等。系统会根据您的目标提供相应的建议和跟踪。';
-  }
-  
-  // 默认回复
-  return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等方面的问题。';
+  // 调用Coze智能体
+  return await callCozeAgentAPI(userMessage);
 };
 
 // ==========================================
@@ -521,11 +530,13 @@ const HomeView = ({ toPage }) => (
   </div>
 );
 
-// --- AI识食 ---
+// --- [修改后] AI识食 ---
 const RecognitionView = ({ onAdd }) => {
   const [imgPreview, setImgPreview] = useState(null);
   const [status, setStatus] = useState('idle');
   const [result, setResult] = useState(null);
+  const [aiAnalysis, setAiAnalysis] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const fileInputRef = useRef(null);
 
   const mockDatabase = [
@@ -543,15 +554,29 @@ const RecognitionView = ({ onAdd }) => {
       reader.onloadend = () => {
         setImgPreview(reader.result);
         setStatus('loading');
-        setTimeout(() => {
+        setIsAnalyzing(true);
+        
+        // 模拟AI分析过程
+        setTimeout(async () => {
           const isSuccess = Math.random() > 0.1; 
           if (isSuccess) {
             const randomDish = mockDatabase[Math.floor(Math.random() * mockDatabase.length)];
             setResult(randomDish);
             setStatus('success');
+            
+            // 调用Coze智能体获取更详细的分析
+            try {
+              const analysisResult = await callCozeAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
+              setAiAnalysis(analysisResult);
+            } catch (error) {
+              console.error('AI分析失败:', error);
+              setAiAnalysis('AI分析暂时不可用，但已识别出菜品基本信息。');
+            }
           } else {
             setStatus('error');
+            setAiAnalysis('');
           }
+          setIsAnalyzing(false);
         }, 1500);
       };
       reader.readAsDataURL(file);
@@ -559,7 +584,7 @@ const RecognitionView = ({ onAdd }) => {
   };
 
   const handleAddToDiet = () => {
-    if(onAdd) {
+    if(onAdd && result) {
         onAdd(result);
         alert(`成功！已将【${result.name}】加入个人中心的饮食清单.`);
     }
@@ -583,6 +608,13 @@ const RecognitionView = ({ onAdd }) => {
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-white bg-opacity-80 flex items-center justify-center flex-col">
                     <div className="text-4xl mb-2">🤖</div>
                     <div className="text-primary font-bold">AI 正在分析...</div>
+                    {isAnalyzing && (
+                      <div className="mt-2 flex space-x-1">
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -622,10 +654,18 @@ const RecognitionView = ({ onAdd }) => {
                  <h4 className="m-0 mb-2 text-gray-600">💡 介绍</h4>
                  <p className="m-0 text-gray-700">{result.intro}</p>
                </div>
-               <div className="mb-8">
+               <div className="mb-5">
                  <h4 className="m-0 mb-2 text-gray-600">🍲 做法概览</h4>
                  <div className="bg-gray-50 p-4 rounded-lg text-gray-600">{result.recipe}</div>
                </div>
+               {aiAnalysis && (
+                 <div className="mb-5">
+                   <h4 className="m-0 mb-2 text-gray-600">🤖 AI详细分析</h4>
+                   <div className="bg-blue-50 p-4 rounded-lg text-gray-700 border border-blue-200">
+                     {aiAnalysis}
+                   </div>
+                 </div>
+               )}
                <button 
                  onClick={handleAddToDiet}
                  className="w-full py-3 bg-success text-white border-none rounded-xl text-lg font-bold cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
