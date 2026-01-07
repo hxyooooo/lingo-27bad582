@@ -1662,7 +1662,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 const callAPI = async (userMessage: string) => {
   try {
     // 🟢 指向 Vite 代理，Vite 会转发给 Python 后端
-    const API_URL = 'api/run'; 
+    const API_URL = 'http://localhost:8000'; 
     
     console.log("正在请求后端:", API_URL);
 
