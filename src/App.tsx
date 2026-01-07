@@ -1656,19 +1656,18 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // 调用智能体API
   // ✅ 根据你的 curl 命令修改后的函数
 // 定义 API 调用函数
-  const callAPI = async (userMessage) => {
+  // 调用智能体API - 修正版
+const callAPI = async (userMessage) => {
   try {
-    // 1. 使用绝对路径，通过 Vite 代理转发
-    const url = '/coze-api/open_api/v2/chat';
+    // 使用正确的代理路径（前面加 /）
+    const url = '/api/coze/open_api/v2/chat';
 
-    // 2. 准备请求头
     const headers = {
       'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A',
       'Content-Type': 'application/json',
       'Accept': '*/*'
     };
 
-    // 3. 准备请求体
     const body = JSON.stringify({
       "bot_id": "7592463172397776937",
       "user": "unique_user_id",
@@ -1678,7 +1677,6 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
     console.log("正在发送请求到:", url);
 
-    // 4. 发起请求
     const response = await fetch(url, {
       method: 'POST',
       headers: headers,
@@ -1693,14 +1691,14 @@ const AIAssistant = ({ isOpen, onClose }) => {
     const data = await response.json();
     console.log("API 返回成功:", data);
     
-    // 5. 提取回复内容
     return data.messages?.[0]?.content || "收到回复，但格式解析失败";
 
   } catch (error) {
     console.error("API 调用严重错误:", error);
-    return "API 调用出错，请按 F12 查看控制台详情";
+    return "API 调用出错: " + error.message;
   }
 };
+
 
 
 
