@@ -1655,7 +1655,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 
   // 调用智能体API
   // ✅ 根据你的 curl 命令修改后的函数
-const callIntelligentAgentAPI = async (userMessage) => {
+const callAPI = async (userMessage, imageUrls = []) => {
   // 1. 你的 API 地址
   const API_URL = "https://7kf89hm5y6.coze.site/stream_run";
   
