@@ -1664,7 +1664,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
         conversation_id: "", // 空字符串表示新对话
         attachments: [] // 暂时没有附件
       };
-
+			const API_BASE_URL = 'http://47.86.161.122:3000' ;
       const response = await fetch('http://47.86.161.122:8000', {
         method: 'POST',
         headers: {
