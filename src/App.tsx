@@ -530,6 +530,8 @@ const HomeView = ({ toPage }) => (
   </div>
 );
 
+import { callIntelligentAgentAPI } from 'https://7kf89hm5y6.coze.site/stream_run'; // 根据实际文件路径调整
+
 // --- [修改后] AI识食 ---
 const RecognitionView = ({ onAdd }) => {
   const [imgPreview, setImgPreview] = useState(null);
@@ -566,7 +568,7 @@ const RecognitionView = ({ onAdd }) => {
             
             // 调用Coze智能体获取更详细的分析
             try {
-              const analysisResult = await callCozeAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
+              const analysisResult = await callIntelligentAgentAPI(`请详细分析图片中的陕西非遗美食，包括菜品名称、营养价值、制作工艺和文化背景。`);
               setAiAnalysis(analysisResult);
             } catch (error) {
               console.error('AI分析失败:', error);
