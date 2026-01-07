@@ -1656,30 +1656,29 @@ const AIAssistant = ({ isOpen, onClose }) => {
   // 调用智能体API
   // ✅ 根据你的 curl 命令修改后的函数
 // 定义 API 调用函数
-const callAPI = async (userMessage: string) => {
+  const callAPI = async (userMessage) => {
   try {
-    // 1. 设置相对路径，利用 Vite 代理转发
-    // 注意：不要加 https://api.coze.cn，也不要加前面的斜杠 /
-    const url = 'coze-api/open_api/v2/chat'; 
+    // 1. 使用绝对路径，通过 Vite 代理转发
+    const url = '/coze-api/open_api/v2/chat';
 
     // 2. 准备请求头
     const headers = {
-      'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A', 
+      'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3Nzg4MTkyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNTkyNDc0NjI3ODk5NDQ2In0.FkJYrVpMJXO7zQrIfgEnjQw3lDCsvFPk_tY2fMkJZRj-m8veYwRcjm8gcpQYdRremwbwHpnpnuG9RWZmUUPb6Wh3HWBjNvnfy50rsZGrn_wr2gHLvp__YcQhG-VaATu-3WrJEWisKqPDEPRiIkIlu40FsfpaQeemAOm1UremnZQSVRL4P-nKO2rXwCuVAO6He9d9in7OeNfJ3ukHRwrQq6NOVhXxdXmvuEDqzpbGK8gumSlaByzIQha3qX5Zwmg_blRZTh9kJzSOMKU4k3HoqSDOEp04ti3F1oSV5G0U6xOM_fcxTmkpv1g_P2KSpmVyjYvXExYbr5lhkavVkR-v-A',
       'Content-Type': 'application/json',
-      'Accept': '*/*', // 接受所有返回类型
+      'Accept': '*/*'
     };
 
-    // 3. 准备请求体 (根据 Coze 文档)
+    // 3. 准备请求体
     const body = JSON.stringify({
-      "bot_id": "7592463172397776937", 
+      "bot_id": "7592463172397776937",
       "user": "unique_user_id",
       "query": userMessage,
-      "stream": false // 暂时先关掉流式，确保能通
+      "stream": false
     });
 
     console.log("正在发送请求到:", url);
 
-    // 4. 发起原生 Fetch 请求 (不会报 unsafe header 错)
+    // 4. 发起请求
     const response = await fetch(url, {
       method: 'POST',
       headers: headers,
@@ -1694,8 +1693,7 @@ const callAPI = async (userMessage: string) => {
     const data = await response.json();
     console.log("API 返回成功:", data);
     
-    // 根据返回格式提取回复，通常在 messages 里
-    // 注意：这里需要根据实际返回结构调整
+    // 5. 提取回复内容
     return data.messages?.[0]?.content || "收到回复，但格式解析失败";
 
   } catch (error) {
