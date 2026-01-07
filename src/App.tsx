@@ -254,7 +254,53 @@ const seasonalData = {
 };
 
 // ==========================================
-// 3. AI健康报告生成算法
+// 3. 智能体API调用函数
+// ==========================================
+
+// 智能体API调用函数
+const callIntelligentAgentAPI = async (userMessage) => {
+  // 模拟API调用延迟
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // 这里是模拟的API响应，实际应用中应该替换为真实的API调用
+  const lowerMsg = userMessage.toLowerCase();
+  
+  // 针对陕西饮食文化的回复
+  if (lowerMsg.includes('陕西') || lowerMsg.includes('文化') || lowerMsg.includes('非遗')) {
+    return '陕西有着丰富的饮食文化，比如腊汁肉夹馍、羊肉泡馍、秦镇米皮等都是陕西省非物质文化遗产。这些美食不仅美味，还承载着深厚的历史文化内涵。';
+  }
+  
+  // 针对节气饮食的回复
+  if (lowerMsg.includes('节气') || lowerMsg.includes('季节') || lowerMsg.includes('饮食')) {
+    return '根据二十四节气调整饮食是中医养生的重要理念。比如立春宜吃春饼，清明宜吃青团，大暑宜喝绿豆汤，冬至宜吃饺子。这些传统食俗既符合时令特点，又有利于身体健康。';
+  }
+  
+  // 针对健康饮食的回复
+  if (lowerMsg.includes('健康') || lowerMsg.includes('营养') || lowerMsg.includes('热量')) {
+    return '健康饮食需要均衡搭配，适量摄入蛋白质、碳水化合物和脂肪。陕西传统美食中，肉夹馍提供蛋白质，米皮富含碳水化合物，搭配蔬菜可以实现营养均衡。';
+  }
+  
+  // 针对AI识食的回复
+  if (lowerMsg.includes('拍照') || lowerMsg.includes('识别') || lowerMsg.includes('菜品')) {
+    return '您可以使用我们的AI识食功能，只需上传一张陕西传统美食的图片，系统就能识别菜品名称、热量和制作方法。非常方便！';
+  }
+  
+  // 针对历史数据的回复
+  if (lowerMsg.includes('历史') || lowerMsg.includes('数据') || lowerMsg.includes('统计')) {
+    return '您可以在个人中心的"历史数据统计"功能中查看和管理您的健康数据，包括体重、热量摄入等历史记录。这些数据有助于您更好地了解自己的健康状况和进步情况。';
+  }
+  
+  // 针对健康目标的回复
+  if (lowerMsg.includes('目标') || lowerMsg.includes('计划') || lowerMsg.includes('设定')) {
+    return '在个人中心的"健康目标设置"功能中，您可以设定个性化的健康目标，如体重管理、热量摄入控制等。系统会根据您的目标提供相应的建议和跟踪。';
+  }
+  
+  // 默认回复
+  return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等方面的问题。';
+};
+
+// ==========================================
+// 4. AI健康报告生成算法
 // ==========================================
 
 // AI健康报告生成函数
@@ -416,7 +462,7 @@ const generateAIHealthReport = (userInfo, dietList, historicalData) => {
 };
 
 // ==========================================
-// 4. 页面组件
+// 5. 页面组件
 // ==========================================
 
 // --- 首页 ---
@@ -1570,45 +1616,19 @@ const AIAssistant = ({ isOpen, onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-  // 模拟AI回复
-  const getAIResponse = (userMessage) => {
-    const lowerMsg = userMessage.toLowerCase();
-    
-    // 针对陕西饮食文化的回复
-    if (lowerMsg.includes('陕西') || lowerMsg.includes('文化') || lowerMsg.includes('非遗')) {
-      return '陕西有着丰富的饮食文化，比如腊汁肉夹馍、羊肉泡馍、秦镇米皮等都是陕西省非物质文化遗产。这些美食不仅美味，还承载着深厚的历史文化内涵。';
+  // 模拟API调用
+  const callAPI = async (userMessage) => {
+    try {
+      // 这里调用智能体API
+      const response = await callIntelligentAgentAPI(userMessage);
+      return response;
+    } catch (error) {
+      console.error('API调用失败:', error);
+      return '抱歉，系统暂时无法提供服务，请稍后再试。';
     }
-    
-    // 针对节气饮食的回复
-    if (lowerMsg.includes('节气') || lowerMsg.includes('季节') || lowerMsg.includes('饮食')) {
-      return '根据二十四节气调整饮食是中医养生的重要理念。比如立春宜吃春饼，清明宜吃青团，大暑宜喝绿豆汤，冬至宜吃饺子。这些传统食俗既符合时令特点，又有利于身体健康。';
-    }
-    
-    // 针对健康饮食的回复
-    if (lowerMsg.includes('健康') || lowerMsg.includes('营养') || lowerMsg.includes('热量')) {
-      return '健康饮食需要均衡搭配，适量摄入蛋白质、碳水化合物和脂肪。陕西传统美食中，肉夹馍提供蛋白质，米皮富含碳水化合物，搭配蔬菜可以实现营养均衡。';
-    }
-    
-    // 针对AI识食的回复
-    if (lowerMsg.includes('拍照') || lowerMsg.includes('识别') || lowerMsg.includes('菜品')) {
-      return '您可以使用我们的AI识食功能，只需上传一张陕西传统美食的图片，系统就能识别菜品名称、热量和制作方法。非常方便！';
-    }
-    
-    // 针对历史数据的回复
-    if (lowerMsg.includes('历史') || lowerMsg.includes('数据') || lowerMsg.includes('统计')) {
-      return '您可以在个人中心的"历史数据统计"功能中查看和管理您的健康数据，包括体重、热量摄入等历史记录。这些数据有助于您更好地了解自己的健康状况和进步情况。';
-    }
-    
-    // 针对健康目标的回复
-    if (lowerMsg.includes('目标') || lowerMsg.includes('计划') || lowerMsg.includes('设定')) {
-      return '在个人中心的"健康目标设置"功能中，您可以设定个性化的健康目标，如体重管理、热量摄入控制等。系统会根据您的目标提供相应的建议和跟踪。';
-    }
-    
-    // 默认回复
-    return '关于陕西传统文化与健康饮食，我可以为您提供很多有用的信息。您可以问我关于陕西非遗美食、节气饮食、营养搭配、历史数据统计、健康目标设置等方面的问题。';
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
     
     // 添加用户消息
@@ -1622,16 +1642,18 @@ const AIAssistant = ({ isOpen, onClose }) => {
     setInputValue('');
     setIsTyping(true);
     
-    // 模拟AI回复延迟
-    setTimeout(() => {
-      const aiResponse = {
-        id: Date.now() + 1,
-        type: 'assistant',
-        content: getAIResponse(inputValue)
-      };
-      setMessages(prev => [...prev, aiResponse]);
-      setIsTyping(false);
-    }, 1000);
+    // 调用智能体API获取回复
+    const aiResponse = await callAPI(inputValue);
+    
+    // 添加AI回复
+    const aiMessage = {
+      id: Date.now() + 1,
+      type: 'assistant',
+      content: aiResponse
+    };
+    
+    setMessages(prev => [...prev, aiMessage]);
+    setIsTyping(false);
   };
 
   const handleKeyPress = (e) => {
@@ -1731,7 +1753,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 };
 
 // ==========================================
-// 5. 布局结构 (修改版：左侧导航 + 顶部标题栏)
+// 6. 布局结构 (修改版：左侧导航 + 顶部标题栏)
 // ==========================================
 
 // 侧边栏按钮组件
