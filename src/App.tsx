@@ -1664,44 +1664,45 @@ const AIAssistant = ({ isOpen, onClose }) => {
 const API_BASE_URL = '/';  // 或 '/api'，取决于Web IDE配置
 
 // API调用函数
-async function callAPI(messages) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/run`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('API调用失败:', error);
-        throw error;
-    }
-}
+const callAPI = async (userMessage: string) => {
+  try {
+    // 🟢 指向 Vite 代理，Vite 会转发给 Python 后端
+    const API_URL = '/api/run'; 
+    
+    console.log("正在请求后端:", API_URL);
 
-    const response = await fetch(`${API_BASE_URL}/run`, {
+    const response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // 🟢 格式要匹配 main.py 里的接收格式
       body: JSON.stringify({
-        messages: [{ role: 'user', content }]
+        messages: [{ content: userMessage }]
       })
     });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`后端报错 ${response.status}: ${errText}`);
+    }
 
     const data = await response.json();
-    const assistantMsg = data.messages?.find(msg => msg.role === 'assistant');
-    return assistantMsg?.content || '抱歉，没有生成回复。';
+    console.log("后端返回:", data);
     
-  } catch (error) {
-    console.error('API调用失败:', error);
+    // 根据 main.py 的返回结构取数据
+    // 注意：这里需要根据你的 Python 代码实际返回来调整
+    // 假设 Python 直接透传了 Coze 的返回：
+    return JSON.stringify(data); 
+
+  } catch (error: any) {
+    console.error("请求失败:", error);
     return `错误: ${error.message}`;
   }
 };
+
+
+    
 
 
   const handleSendMessage = async () => {
