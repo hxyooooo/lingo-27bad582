@@ -5,10 +5,11 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,
-    // allowedHosts: true, // 如果报错可以先把这行注释掉，通常不需要
+    host: true, // 允许外部访问
+    // 👇 关键修改：将报错提示的域名加入允许列表
+    allowedHosts: ['lingo.console.aliyun.com'],
     
-    // 👇 注意：proxy 必须在 server 内部，并且前面要有逗号
+    // 👇 之前的代理配置必须保留，否则 API 还是会报错
     proxy: {
       '/coze-api': {
         target: 'https://7kf89hm5y6.coze.site',
