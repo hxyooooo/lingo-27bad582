@@ -213,9 +213,9 @@ const seasonalData = {
     color: '#52c41a',
     intro: '立春，为二十四节气之首。立，是"开始"之意；春，代表着温暖、生长。立春不仅是春天的开始，也是一年农事活动的开端。陕西民间有"咬春"的习俗，吃春饼、嚼萝卜，祈求身体健康，五谷丰登。',
     foods: [
-      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: 'https://ts1.tc.mm.bing.net/th/id/R-C.045dd6580ce901e597aad684dd91f41e?rik=zW3tOqTxz8t4kQ&riu=http%3a%2f%2fi2.chuimg.com%2f76f51a18879c11e6a9a10242ac110002_602w_400h.jpg%3fimageView2%2f2%2fw%2f660%2finterlace%2f1%2fq%2f90&ehk=r91YLt4CuoZCHdjy2D5F4W4CXdGq3%2byLot8JRvBN%2bK4%3d&risl=&pid=ImgRaw&r=0' },
-      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.YzTDSDC6MyYonnrVL1GJzwHaE6?w=279&h=185&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: 'https://ts1.tc.mm.bing.net/th/id/R-C.61dc12489483e23207bb6a66dc680e11?rik=ZpOjR59%2f7X5jJw&riu=http%3a%2f%2fi3.meishichina.com%2fattachment%2frecipe%2f2017%2f05%2f15%2f20170515149483413949078346.JPG%40!p800&ehk=tUtQ2k2c8K1Z%2bnE46gVqewz3rWajDL41ZE%2btY82hvuU%3d&risl=&pid=ImgRaw&r=0' }
+      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: '.' },
+      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: '.' },
+      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: '.' }
     ]
   },
   qingming: {
@@ -224,9 +224,9 @@ const seasonalData = {
     color: '#13c2c2',
     intro: '清明时节雨纷纷，万物生长此时洁净而明清。此时节气温转暖，但早晚仍有凉意。饮食宜温和，多吃柔肝养肺的食物。陕西关中地区有吃"寒食"的遗风，如凉皮、凉面等。',
     foods: [
-      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: 'https://tse2-mm.cn.bing.net/th/id/OIP-C.uZok5zmCpvNY-UNpNGIagAHaE7?w=292&h=195&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.E7RN9PejTftV0rvgOvH7FwHaE7?w=255&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: 'https://tse2-mm.cn.bing.net/th/id/OIP-C.ULUNTmvGfulZyBaHXlkr2QHaE6?w=226&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' }
+      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: '.' },
+      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: '.' },
+      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: '.' }
     ]
   },
   dashu: {
@@ -235,9 +235,9 @@ const seasonalData = {
     color: '#fa8c16',
     intro: '大暑是全年最热的节气，"湿热交蒸"在此时达到顶点。饮食应以清热解暑、健脾利湿为主。老陕人喜欢在夏天喝绿豆汤、吃浆水鱼鱼，既解暑又开胃。',
     foods: [
-      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.1Cg_lCbV_nhUpvxLjHIeOwHaE8?w=251&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.WHwrZfW6SPOHOF_5ADNRmAHaE7?w=241&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.fZuenSBz0iXiRQjaX021gwHaE8?w=259&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' }
+      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: '.' },
+      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: '.' },
+      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: '.' }
     ]
   },
   dongzhi: {
@@ -246,9 +246,9 @@ const seasonalData = {
     color: '#1890ff',
     intro: '冬至是"阴极之至，阳气始生"的重要节气。在陕西，冬至地位极高，所谓"冬至大如年"。最核心的习俗就是吃饺子，寓意消寒，不冻耳朵；陕北地区则有喝羊肉汤的习惯，以此温补阳气。',
     foods: [
-      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.BItlOj-RbuswRvMVzZSp0gHaE8?w=266&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.UvTebtlsf0yYBs2qhKV5xQHaE8?w=282&h=188&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' },
-      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: 'https://tse1-mm.cn.bing.net/th/id/OIP-C.WNnKNEBV2Vs_9N2r4hteBQHaEr?w=295&h=186&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3' }
+      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: '.' },
+      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: '.' },
+      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: '.' }
     ]
   }
 };
