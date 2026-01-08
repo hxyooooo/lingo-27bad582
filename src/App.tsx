@@ -1658,7 +1658,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
   try {
     // 1. URL 改为指向你的本地 Python 后端
     // 注意：如果是在服务器上部署，把 localhost 换成服务器 IP
-    const response = await fetch('http://localhost:8000/run', {
+    const response = await fetch('http://47.86.161.122:8000/run', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
