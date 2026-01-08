@@ -1654,108 +1654,122 @@ const AIAssistant = ({ isOpen, onClose }) => {
   }, [messages]);
 
   // 调用智能体API
-  const callAPI = async (userMessage, imageUrls = []) => {
-  try {
-    // 1. URL 改为指向你的本地 Python 后端
-    // 注意：如果是在服务器上部署，把 localhost 换成服务器 IP
-    const response = await fetch('http://47.86.161.122:8000/run', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // 2. Body 格式要匹配 Python 后端的 Pydantic 模型 (ChatRequest)
-      body: JSON.stringify({
-        messages: [
-          {
-            role: "user",
-            content: userMessage
-          }
-        ]
-      })
-    });
+  const API_URL = 'http://47.86.161.122:8000/run';
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    // 3. 直接获取后端返回的 content 字段
-    if (data && data.content) {
-      return data.content;
-    } else {
-      return "AI 没有返回有效内容";
-    }
-    
-  } catch (error) {
-    console.error('API调用失败:', error);
-    if (error.message.includes('Failed to fetch')) {
-      return '无法连接到后端服务，请检查：\n1. python main.py 是否正在运行？\n2. 端口 8000 是否被占用？';
-    }
-    return `系统错误：${error.message}`;
-  }
-};
-
-
-  const handleSendMessage = async () => {
-    if (inputValue.trim() === '' && uploadedImages.length === 0) return;
-    
-    // 添加用户消息
-    const newUserMessage = {
-      id: Date.now(),
-      type: 'user',
-      content: inputValue,
-      images: uploadedImages // 如果有图片
-    };
-    
-    setMessages(prev => [...prev, newUserMessage]);
-    setInputValue('');
-    setIsTyping(true);
-    
+  const callAPI = async (text, imageFile = null) => {
     try {
-      // 调用智能体API获取回复
-      const aiResponse = await callAPI(
-        inputValue, 
-        uploadedImages.map(img => img.url)
-      );
-      
-      // 添加AI回复
-      const aiMessage = {
-        id: Date.now() + 1,
-        type: 'assistant',
-        content: aiResponse
-      };
-      
-      setMessages(prev => [...prev, aiMessage]);
+      let options = {};
+
+      if (imageFile) {
+        // 📸 情况 A: 有图片，使用 FormData (自动适配 multipart/form-data)
+        const formData = new FormData();
+        formData.append('text', text);
+        formData.append('image', imageFile); // 把原始文件放进去
+
+        options = {
+          method: 'POST',
+          body: formData,
+          // 注意：发 FormData 时，千万不要手动设置 Content-Type，浏览器会自动处理
+        };
+      } else {
+        // 📝 情况 B: 只有文字，使用 JSON
+        options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: text }]
+          }),
+        };
+      }
+
+      const response = await fetch(API_URL, options);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.content || "未获取到有效回复";
+
     } catch (error) {
-      // 显示错误消息
-      const errorMessage = {
-        id: Date.now() + 1,
-        type: 'assistant',
-        content: `❌ 发生错误：${error.message}`
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-      setUploadedImages([]); // 清空上传的图片
+      console.error("API调用失败:", error);
+      return "抱歉，系统暂时无法响应，请检查后端连接。";
     }
   };
+
+
+
+    const handleSendMessage = async () => {
+    // 如果没有输入且没有图片，直接返回
+    if (inputValue.trim() === '' && uploadedImages.length === 0) return;
+
+    const currentText = inputValue;
+    const currentImages = [...uploadedImages]; // 复制一份当前的图片列表
+    
+    // 1. 设置用户消息显示
+    const newUserMsg = {
+      id: Date.now(),
+      type: 'user',
+      content: currentText,
+      images: currentImages,
+      timestamp: new Date()
+    };
+    
+    setMessages(prev => [...prev, newUserMsg]);
+    setInputValue('');
+    setUploadedImages([]); // 清空上传区
+    setIsTyping(true);
+
+    try {
+      // 2. 准备发送的数据
+      // 目前后端只支持一次传一张图，我们取第一张
+      const imageToSend = currentImages.length > 0 ? currentImages[0].originFile : null;
+
+      // 3. 调用 API
+      const aiResponseText = await callAPI(currentText, imageToSend);
+
+      // 4. 显示 AI 回复
+      const newAiMsg = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: aiResponseText,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, newAiMsg]);
+
+    } catch (error) {
+      const errorMsg = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: "发生错误，请重试。",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
 
   // 图片上传处理
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setUploadedImages(prev => [...prev, {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        // 使用 URL.createObjectURL 生成预览，既快又保留了原始 file 对象
+        const newImage = {
           id: Date.now(),
-          url: event.target.result,
-          name: file.name
-        }]);
-      };
-      reader.readAsDataURL(file);
-    });
+          url: URL.createObjectURL(file), 
+          name: file.name,
+          originFile: file // 👈 关键：保存原始文件对象，发送时要用
+        };
+        setUploadedImages(prev => [...prev, newImage]);
+      });
+    }
   };
+
 
   // 其他代码保持不变...
   const handleKeyPress = (e) => {
