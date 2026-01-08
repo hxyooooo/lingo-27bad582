@@ -153,7 +153,7 @@ const heritageData = [
     id: 1,
     title: '陕西皮影戏',
     category: '民间美术 / 国家级非遗',
-    image: 'https://img95.699pic.com/photo/50064/0488.jpg_wh860.jpg',
+    image: 'https://cn.bing.com/images/search?view=detailV2&ccid=2lnd7HNQ&id=B9546D0F9530E9FB65286EA76C90778D64056494&thid=OIP.2lnd7HNQ1OHOMT2-b8C1kAHaE7&mediaurl=https%3a%2f%2fimg95.699pic.com%2fphoto%2f50115%2f4180.jpg_wh860.jpg&exph=573&expw=860&q=%e9%99%95%e8%a5%bf%e7%9a%ae%e5%bd%b1%e6%88%8f&FORM=IRPRST&ck=7E7481C51A2EB1A69AE59792BCC4EAD6&selectedIndex=4&itb=0',
     desc: '一口叙说千古事，双手对舞百万兵。',
     detail: '陕西皮影戏起源于汉代，兴盛于唐宋。其造型质朴单纯，富于装饰性，同时又具有精致工巧的艺术特色。表演时，艺人们在白色幕布后面，一边操纵影人，一边用秦腔讲述故事，吼出西北汉子的豪迈。',
     videoUrl: 'https://www.bilibili.com/video/BV1Ax411w7F6/'
@@ -162,7 +162,7 @@ const heritageData = [
     id: 2,
     title: '秦腔',
     category: '传统戏剧 / 国家级非遗',
-    image: 'https://img95.699pic.com/photo/50046/5569.jpg_wh860.jpg', 
+    image: 'https://cn.bing.com/images/search?view=detailV2&ccid=qugbwyFX&id=D9174AB4CCCF25AE12C6C7B3C92B993733A70E53&thid=OIP.qugbwyFX8LNySDFPIShYRQHaE7&mediaurl=https%3a%2f%2fstatic.jingjiribao.cn%2f2022%2f6%2f14%2f139371_W020220614376771912762.jpeg&exph=1066&expw=1600&q=%e7%a7%a6%e8%85%94&FORM=IRPRST&ck=0A241D64AEC5753EBED7EA6D2DB759E3&selectedIndex=2&itb=0', 
     desc: '八百里秦川尘土飞扬，三千万老陕齐吼秦腔。',
     detail: '秦腔，别称"邦子腔"，是中国西北最古老的戏剧之一。其特点是高昂激越、强烈急促。听秦腔，能感受到关中八百里秦川的厚重与沧桑，是国家级非物质文化遗产。',
     videoUrl: 'https://www.bilibili.com/video/BV1Qs411N7vK/'
@@ -171,7 +171,7 @@ const heritageData = [
     id: 3,
     title: '凤翔泥塑',
     category: '传统技艺 / 宝鸡',
-    image: 'https://img95.699pic.com/photo/50160/3277.jpg_wh860.jpg',
+    image: 'https://cn.bing.com/images/search?view=detailV2&ccid=OpKBJuA5&id=4A63CD51DD315349C0C082A4AEC976B2642C95F2&thid=OIP.OpKBJuA5Vw3n-6BamjvY0QHaE8&mediaurl=https%3a%2f%2fx0.ifengimg.com%2fucms%2f2023_50%2f98606F29742C6CDB0315C15742A32C70C0E98498_size1473_w1200_h800.png&exph=800&expw=1200&q=%e5%87%a4%e7%bf%94%e6%b3%a5%e5%a1%91&FORM=IRPRST&ck=0428489857BCD976F70BA284452140A7&selectedIndex=1&itb=0',
     desc: '色彩艳丽，造型夸张，寓意驱邪避灾。',
     detail: '凤翔泥塑汲取了古代石刻、年画、剪纸和刺otto的纹饰，造型夸张，色彩鲜艳，深受人们喜爱。其中以"挂虎"和"坐虎"最为典型，寓意驱邪避灾，吉祥如意。',
     videoUrl: 'https://www.bilibili.com/video/BV1UW411M7Sg/'
@@ -180,7 +180,7 @@ const heritageData = [
     id: 4,
     title: '安塞腰鼓',
     category: '民俗舞蹈 / 延安',
-    image: 'https://img95.699pic.com/photo/40007/3569.jpg_wh860.jpg', 
+    image: 'https://ts1.tc.mm.bing.net/th/id/R-C.21668e11208da8644a9c46a1439eb0cf?rik=NUCVdSgSTdPySA&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fphotoblog%2f1006%2f01%2fc16%2f4077920_4077920_1275398392718.jpg&ehk=aKBueP3ldmhvabRp0Olxvf201nwMrYWpwh5TYWiNfFg%3d&risl=&pid=ImgRaw&r=0', 
     desc: '黄土高原上的"第一鼓"，气势磅礴。',
     detail: '安塞腰鼓是黄土高原上的一种独特的民间大型舞蹈艺术形式，具有2000年以上的历史。表演可由几人或上千人一同进行，磅礴的气势，精湛的技艺，使人叹为观止。',
     videoUrl: 'https://www.bilibili.com/video/BV1Mx411w7nQ/'
@@ -189,7 +189,7 @@ const heritageData = [
     id: 5,
     title: '同州梆子',
     category: '传统戏剧 / 渭南',
-    image: 'https://img95.699pic.com/photo/50055/5638.jpg_wh860.jpg',
+    image: '同州梆子https://cn.bing.com/images/search?view=detailV2&ccid=akWGgnR6&id=0A2003680D0D8BC85C0CF6EED4D2997325A774B0&thid=OIP.akWGgnR6DnN8Jq5V1n5jIwHaF8&mediaurl=https%3a%2f%2fts1.tc.mm.bing.net%2fth%2fid%2fR-C.6a458682747a0e737c26ae55d67e6323%3frik%3dsHSnJXOZ0tTu9g%26riu%3dhttp%253a%252f%252fwww.whysb.org%252fwhysb%252f20171117%252fhtml%252fc3b85411da0154c04e881933a3e8dddb_img_671_817_196_158.jpg%26ehk%3dPBjtevoUe1X76gg7%252bRbKz1HfSjnkrPrQqBFagZLBTLo%253d%26risl%3d%26pid%3dImgRaw%26r%3d0&exph=600&expw=748&q=%e5%90%8c%e5%b7%9e%e6%a2%86%e5%ad%90&FORM=IRPRST&ck=17001E83A5EA80CEFEB0419621387ABD&selectedIndex=1&itb=0',
     desc: '秦腔的鼻祖，唱腔激越豪放。',
     detail: '同州梆子是陕西省东府渭南地区的地方戏曲剧种，是秦腔的前身。它保留了更多古老的音韵和表演程式，具有极高的艺术研究价值。',
     videoUrl: '#'
@@ -198,7 +198,7 @@ const heritageData = [
     id: 6,
     title: '耀州窑陶瓷',
     category: '传统技艺 / 铜川',
-    image: 'https://img95.699pic.com/photo/50059/8966.jpg_wh860.jpg',
+    image: '耀州窑瓷器https://cn.bing.com/images/search?view=detailV2&ccid=TmPQKYiQ&id=E04F002D822BCC35234A5432EFF50127DA4F1B1C&thid=OIP.TmPQKYiQlNe8ONiO6wsc7QHaHa&mediaurl=https%3a%2f%2fn.sinaimg.cn%2fsinacn20112%2f560%2fw1080h1080%2f20190926%2f0fb4-ifaench4991248.jpg&exph=1080&expw=1080&q=%e8%80%80%e5%b7%9e%e7%aa%91%e7%93%b7%e5%99%a8&FORM=IRPRST&ck=EB46720F0B271A001999A509AD67C623&selectedIndex=4&itb=0',
     desc: '巧如范金，精比琢玉，北方青瓷代表。',
     detail: '耀州窑是中国传统制瓷工艺中的珍品，宋代六大窑系。其刀法犀利流畅，线条刚劲有力，素有"北方青瓷之冠"的美誉。',
     videoUrl: '#'
@@ -213,9 +213,9 @@ const seasonalData = {
     color: '#52c41a',
     intro: '立春，为二十四节气之首。立，是"开始"之意；春，代表着温暖、生长。立春不仅是春天的开始，也是一年农事活动的开端。陕西民间有"咬春"的习俗，吃春饼、嚼萝卜，祈求身体健康，五谷丰登。',
     foods: [
-      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: '🌯' },
-      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: '🥕' },
-      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: '🥚' }
+      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: '?' },
+      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: '?' },
+      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: '?' }
     ]
   },
   qingming: {
@@ -224,9 +224,9 @@ const seasonalData = {
     color: '#13c2c2',
     intro: '清明时节雨纷纷，万物生长此时洁净而明清。此时节气温转暖，但早晚仍有凉意。饮食宜温和，多吃柔肝养肺的食物。陕西关中地区有吃"寒食"的遗风，如凉皮、凉面等。',
     foods: [
-      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: '🟢' },
-      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: '🍜' },
-      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: '🐚' }
+      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: '?' },
+      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: '?' },
+      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: '?' }
     ]
   },
   dashu: {
@@ -235,9 +235,9 @@ const seasonalData = {
     color: '#fa8c16',
     intro: '大暑是全年最热的节气，"湿热交蒸"在此时达到顶点。饮食应以清热解暑、健脾利湿为主。老陕人喜欢在夏天喝绿豆汤、吃浆水鱼鱼，既解暑又开胃。',
     foods: [
-      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: '🥣' },
-      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: '🐟' },
-      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: '🥒' }
+      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: '?' },
+      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: '?' },
+      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: '?' }
     ]
   },
   dongzhi: {
@@ -246,9 +246,9 @@ const seasonalData = {
     color: '#1890ff',
     intro: '冬至是"阴极之至，阳气始生"的重要节气。在陕西，冬至地位极高，所谓"冬至大如年"。最核心的习俗就是吃饺子，寓意消寒，不冻耳朵；陕北地区则有喝羊肉汤的习惯，以此温补阳气。',
     foods: [
-      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: '🥟' },
-      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: '🥘' },
-      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: '🥣' }
+      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: '?' },
+      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: '?' },
+      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: '?' }
     ]
   }
 };
@@ -603,7 +603,7 @@ const RecognitionView = ({ onAdd }) => {
                 <img src={imgPreview} alt="Preview" className="w-full h-full object-cover" />
                 {status === 'loading' && (
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-white bg-opacity-80 flex items-center justify-center flex-col">
-                    <div className="text-4xl mb-2">🤖</div>
+                    <div className="text-4xl mb-2">?</div>
                     <div className="text-primary font-bold">AI 正在分析...</div>
                     {isAnalyzing && (
                       <div className="mt-2 flex space-x-1">
@@ -616,7 +616,7 @@ const RecognitionView = ({ onAdd }) => {
                 )}
               </>
             ) : (
-              <><div className="text-6xl text-gray-300 mb-2">📷</div><div className="text-gray-500">点击上传图片</div></>
+              <><div className="text-6xl text-gray-300 mb-2">?</div><div className="text-gray-500">点击上传图片</div></>
             )}
           </div>
           <div className="mt-5">
@@ -624,14 +624,14 @@ const RecognitionView = ({ onAdd }) => {
                onClick={handleBtnClick} 
                className="px-8 py-3 bg-primary text-white border-none rounded-lg text-lg cursor-pointer shadow-lg hover:shadow-xl transition-shadow"
              >
-               {imgPreview ? '🔄 重新上传' : '📤 上传图片'}
+               {imgPreview ? '? 重新上传' : '? 上传图片'}
              </button>
           </div>
         </div>
         <div className="flex-1 min-w-[300px] text-left">
           {status === 'idle' && (
              <div className="bg-white p-10 rounded-2xl h-88 flex flex-col justify-center items-center text-gray-500 shadow-md">
-               <div className="text-5xl mb-5 opacity-50">📊</div>
+               <div className="text-5xl mb-5 opacity-50">?</div>
                <div>请上传图片，右侧将显示分析结果</div>
              </div>
           )}
@@ -648,16 +648,16 @@ const RecognitionView = ({ onAdd }) => {
                  </div>
                </div>
                <div className="mb-5">
-                 <h4 className="m-0 mb-2 text-gray-600">💡 介绍</h4>
+                 <h4 className="m-0 mb-2 text-gray-600">? 介绍</h4>
                  <p className="m-0 text-gray-700">{result.intro}</p>
                </div>
                <div className="mb-5">
-                 <h4 className="m-0 mb-2 text-gray-600">🍲 做法概览</h4>
+                 <h4 className="m-0 mb-2 text-gray-600">? 做法概览</h4>
                  <div className="bg-gray-50 p-4 rounded-lg text-gray-600">{result.recipe}</div>
                </div>
                {aiAnalysis && (
                  <div className="mb-5">
-                   <h4 className="m-0 mb-2 text-gray-600">🤖 AI详细分析</h4>
+                   <h4 className="m-0 mb-2 text-gray-600">? AI详细分析</h4>
                    <div className="bg-blue-50 p-4 rounded-lg text-gray-700 border border-blue-200">
                      {aiAnalysis}
                    </div>
@@ -716,7 +716,7 @@ const SeasonalView = ({ onAdd }) => {
     <div className="max-w-6xl mx-auto p-10">
       {/* 标题区域 */}
       <div className="text-left mb-8">
-        <h2 className="text-3xl text-gray-800 m-0">📅 节气饮食推荐</h2>
+        <h2 className="text-3xl text-gray-800 m-0">? 节气饮食推荐</h2>
         <p className="text-gray-600 mt-1">根据二十四节气，推荐适合当季的传统美食</p>
       </div>
 
@@ -756,7 +756,7 @@ const SeasonalView = ({ onAdd }) => {
       </div>
 
       {/* 食物推荐列表 */}
-      <h3 className="text-2xl text-gray-800 mb-5 ml-2.5">🍽 推荐食谱</h3>
+      <h3 className="text-2xl text-gray-800 mb-5 ml-2.5">? 推荐食谱</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {termInfo.foods.map((food, index) => (
           <div 
@@ -796,7 +796,7 @@ const CultureView = ({ toPage }) => {
   return (
     <div className="max-w-6xl mx-auto p-10">
       <div className="text-left mb-8">
-        <h2 className="text-3xl text-gray-800 m-0">🏛 陕西非遗文化长廊</h2>
+        <h2 className="text-3xl text-gray-800 m-0">? 陕西非遗文化长廊</h2>
         <p className="text-gray-600 mt-1">探索三秦大地千年的文化积淀</p>
       </div>
       
@@ -851,7 +851,7 @@ const CultureView = ({ toPage }) => {
                 </p>
               </div>
               <div className="mb-6">
-                <h4 className="m-0 mb-2.5 text-gray-600">📖 详细介绍</h4>
+                <h4 className="m-0 mb-2.5 text-gray-600">? 详细介绍</h4>
                 <p className="text-gray-700 leading-relaxed m-0">
                   {selectedItem.detail}
                 </p>
@@ -936,7 +936,7 @@ const HistoricalDataView = () => {
   return (
     <div className="max-w-4xl mx-auto p-5">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl text-gray-800 m-0">📊 历史数据统计</h2>
+        <h2 className="text-2xl text-gray-800 m-0">? 历史数据统计</h2>
         <button
           onClick={() => {
             setEditingItem(null);
@@ -1025,7 +1025,7 @@ const HistoricalDataView = () => {
       <div className="bg-white rounded-2xl p-5 shadow-md">
         {historicalData.length === 0 ? (
           <div className="text-center text-gray-400 p-10">
-            <div className="text-5xl mb-2.5">📊</div>
+            <div className="text-5xl mb-2.5">?</div>
             <div>暂无历史数据</div>
             <div className="text-xs mt-1.5">点击上方按钮添加第一条记录</div>
           </div>
@@ -1140,7 +1140,7 @@ const HealthGoalsView = () => {
   return (
     <div className="max-w-4xl mx-auto p-5">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl text-gray-800 m-0">🎯 健康目标设置</h2>
+        <h2 className="text-2xl text-gray-800 m-0">? 健康目标设置</h2>
         <button
           onClick={() => {
             setEditingGoal(null);
@@ -1253,7 +1253,7 @@ const HealthGoalsView = () => {
       <div className="bg-white rounded-2xl p-5 shadow-md">
         {healthGoals.length === 0 ? (
           <div className="text-center text-gray-400 p-10">
-            <div className="text-5xl mb-2.5">🎯</div>
+            <div className="text-5xl mb-2.5">?</div>
             <div>暂无健康目标</div>
             <div className="text-xs mt-1.5">点击上方按钮设置您的第一个健康目标</div>
           </div>
@@ -1413,7 +1413,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
         <div className="bg-white rounded-2xl p-5 shadow-md mb-8 min-h-25">
           {safeList.length === 0 ? (
             <div className="text-center text-gray-400 p-5">
-              <div className="text-5xl mb-2.5">📝</div>
+              <div className="text-5xl mb-2.5">?</div>
               <div>暂无记录</div>
               <div className="text-xs mt-1.5">请使用AI识食或节气食谱功能添加</div>
             </div>
@@ -1458,7 +1458,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
           
           {healthReports.length === 0 ? (
             <div className="text-center text-gray-400 p-10">
-              <div className="text-5xl mb-2.5">📊</div>
+              <div className="text-5xl mb-2.5">?</div>
               <div>暂无健康报告</div>
               <div className="text-xs mt-1.5">点击上方按钮生成今日健康报告</div>
             </div>
@@ -1506,19 +1506,19 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
       {/* 5. 菜单列表 */}
       <div className="bg-white rounded-2xl overflow-hidden shadow-md">
         <MenuItem 
-          icon="📊" 
+          icon="?" 
           title="历史数据统计" 
           onClick={() => window.location.hash = '#historical-data'} 
         />
         <MenuItem 
-          icon="🎯" 
+          icon="?" 
           title="健康目标设置" 
           onClick={() => window.location.hash = '#health-goals'} 
         />
-        <MenuItem icon="📱" title="消息通知" />
-        <MenuItem icon="🔧" title="系统设置" />
+        <MenuItem icon="?" title="消息通知" />
+        <MenuItem icon="?" title="系统设置" />
         <MenuItem icon="❓" title="帮助与反馈" />
-        <MenuItem icon="🚪" title="退出登录" isRed />
+        <MenuItem icon="?" title="退出登录" isRed />
       </div>
 
       {/* 健康报告详情弹窗 */}
@@ -1621,7 +1621,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
                 <ul className="space-y-2">
                   {selectedReport.culturalTips.map((tip, idx) => (
                     <li key={idx} className="flex items-start">
-                      <div className="text-warning mr-2">💡</div>
+                      <div className="text-warning mr-2">?</div>
                       <span className="text-gray-700">{tip}</span>
                     </li>
                   ))}
@@ -1654,66 +1654,53 @@ const AIAssistant = ({ isOpen, onClose }) => {
   }, [messages]);
 
   // 调用智能体API
-  // ✅ 根据你的 curl 命令修改后的函数
-// 定义 API 调用函数
-  // 调用智能体API - 修正版
-// 确保删除所有 Coze SDK 的引用！只保留 React 相关的
+  const callAPI = async (userMessage, imageUrls = []) => {
+    try {
+      // 使用Coze智能体API，而不是本地API
+      const requestBody = {
+        user_id: "user123", // 可以根据需要生成用户ID
+        stream: false, // 非流式响应
+        query: userMessage,
+        conversation_id: "", // 空字符串表示新对话
+        attachments: [] // 暂时没有附件
+      };
 
-// 在 AIAssistant 组件内部
-// App.tsx - 完整配置
-// App.tsx
+      const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
+        },
+        body: JSON.stringify(requestBody)
+      });
 
-// API调用函数
-const callAPI = async (userMessage: string) => {
-  try {
-    // 🟢 指向 Vite 代理路径
-    // 浏览器会请求: http://lingo.console.aliyun.com/.../api/run
-    // Vite 会转发给: http://127.0.0.1:8000/run
-    const API_URL = '/api/run'; 
-    
-    console.log("正在请求后端:", API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // 🟢 确保这里的结构符合 Python main.py 的要求
-      body: JSON.stringify({
-        messages: [{ content: userMessage }]
-      })
-    });
-
-    if (!response.ok) {
-      // 处理 404 或 500 错误
-      const errText = await response.text();
-      throw new Error(`后端报错 ${response.status}: ${errText}`);
-    }
-
-    const data = await response.json();
-    console.log("后端返回原始数据:", data);
-    
-    // 🟢 数据处理建议：
-    // 假设后端返回结构是: { "role": "assistant", "content": "你好，我是AI", ... }
-    // 如果你想直接显示文本，应该 return data.content
-    // 如果你不确定结构，先用 stringify 调试也没问题
-    if (data.content) {
+      const data = await response.json();
+      
+      // 提取AI回复
+      if (data && data.message) {
+        return data.message;
+      } else if (data && data.content) {
         return data.content;
-    } else if (data.choices && data.choices[0]) {
-        // 兼容 OpenAI 格式
-        return data.choices[0].message.content;
-    } else {
-        // 兜底：返回整个 JSON 字符串
-        return JSON.stringify(data, null, 2); 
+      } else {
+        // 如果响应格式不同，返回整个响应的字符串表示
+        return JSON.stringify(data);
+      }
+      
+    } catch (error) {
+      console.error('API调用失败:', error);
+      
+      // 更详细的错误提示
+      if (error.message.includes('Failed to fetch')) {
+        return '无法连接到服务器，请检查：\n1. 服务是否已启动\n2. 网络连接是否正常\n3. 是否存在跨域问题';
+      }
+      
+      return `抱歉，系统暂时无法提供服务。错误：${error.message}`;
     }
-
-  } catch (error: any) {
-    console.error("请求失败详情:", error);
-    return `系统错误: ${error.message}`;
-  }
-};
-    
-
+  };
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '' && uploadedImages.length === 0) return;
@@ -1840,28 +1827,7 @@ const callAPI = async (userMessage: string) => {
                 </div>
               </div>
             ))}
-
-						{/* ✅ 新增：AI思考时的加载提示 */}
-						{isTyping && (
-  						<div className="flex justify-start">
-    						{/* 头像 */}
-    						<div className="bg-white bg-opacity-20 w-10 h-10 rounded-full flex items-center justify-center mr-3 flex-shrink-0 border border-gray-200">
-       						<span className="text-xl">🤖</span>
-    						</div>
-    						{/* 气泡 */}
-    						<div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-500 flex items-center gap-2">
-      						<span>AI正在思考中</span>
-      						{/* 简单的跳动点动画 */}
-      						<span className="flex gap-1">
-        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
-        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></span>
-        						<span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
-      						</span>
-    						</div>
-  						</div>
-						)}
-
-						
+            
             {isTyping && (
               <div className="flex justify-start">
                 <div className="bg-white text-gray-800 px-4 py-2 rounded-2xl rounded-tl-none border border-gray-200">
@@ -1910,7 +1876,7 @@ const callAPI = async (userMessage: string) => {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              📷
+              ?
             </label>
             
             <textarea
@@ -1932,7 +1898,7 @@ const callAPI = async (userMessage: string) => {
             </button>
           </div>
           <div className="text-xs text-gray-500 mt-2">
-            💡 支持文本咨询和图片识别（上传食物图片分析营养）
+            ? 支持文本咨询和图片识别（上传食物图片分析营养）
           </div>
         </div>
       </div>
