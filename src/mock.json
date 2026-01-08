@@ -31,7 +31,7 @@
       "id": 4,
       "title": "安塞腰鼓",
       "category": "民俗舞蹈 / 延安",
-      "image": "https://img95.699pic.com/photo/40007/3569.jpg_wh860.jpg", 
+      "image": "https://cn.bing.com/images/search?view=detailV2&ccid=IWaOESCN&id=86C38B7DEE1DCB4CDAEE48F2D34D122875954035&thid=OIP.IWaOESCNqGRKnEahQ56wzwHaE7&mediaurl=https%3a%2f%2fts1.tc.mm.bing.net%2fth%2fid%2fR-C.21668e11208da8644a9c46a1439eb0cf%3frik%3dNUCVdSgSTdPySA%26riu%3dhttp%253a%252f%252fimg.pconline.com.cn%252fimages%252fupload%252fupc%252ftx%252fphotoblog%252f1006%252f01%252fc16%252f4077920_4077920_1275398392718.jpg%26ehk%3daKBueP3ldmhvabRp0Olxvf201nwMrYWpwh5TYWiNfFg%253d%26risl%3d%26pid%3dImgRaw%26r%3d0&exph=2832&expw=4256&q=%e5%ae%89%e5%a1%9e%e8%85%b0%e9%bc%93&FORM=IRPRST&ck=DA62E156ED239C397663CA60F7846EAA&selectedIndex=5&itb=0安塞腰鼓", 
       "desc": "黄土高原上的\"第一鼓\"，气势磅礴。",
       "detail": "安塞腰鼓是黄土高原上的一种独特的民间大型舞蹈艺术形式，具有2000年以上的历史。表演可由几人或上千人一同进行，磅礴的气势，精湛的技艺，使人叹为观止。",
       "videoUrl": "https://www.bilibili.com/video/BV1Mx411w7nQ/"
@@ -62,9 +62,9 @@
       "color": "#52c41a",
       "intro": "立春，为二十四节气之首。立，是\"开始\"之意；春，代表着温暖、生长。立春不仅是春天的开始，也是一年农事活动的开端。陕西民间有\"咬春\"的习俗，吃春饼、嚼萝卜，祈求身体健康，五谷丰登。",
       "foods": [
-        { "name": "春饼卷素", "calories": 320, "desc": "薄饼卷土豆丝、豆芽，寓意咬住春天", "icon": "🌯" },
-        { "name": "凉拌萝卜丝", "calories": 80, "desc": "清脆爽口，顺气消食，谓之\"咬春\"", "icon": "🥕" },
-        { "name": "韭菜炒鸡蛋", "calories": 260, "desc": "春令时鲜，助阳生发", "icon": "🥚" }
+        { "name": "春饼卷素", "calories": 320, "desc": "薄饼卷土豆丝、豆芽，寓意咬住春天", "icon": "?" },
+        { "name": "凉拌萝卜丝", "calories": 80, "desc": "清脆爽口，顺气消食，谓之\"咬春\"", "icon": "?" },
+        { "name": "韭菜炒鸡蛋", "calories": 260, "desc": "春令时鲜，助阳生发", "icon": "?" }
       ]
     },
     "qingming": {
@@ -73,9 +73,9 @@
       "color": "#13c2c2",
       "intro": "清明时节雨纷纷，万物生长此时洁净而明清。此时节气温转暖，但早晚仍有凉意。饮食宜温和，多吃柔肝养肺的食物。陕西关中地区有吃\"寒食\"的遗风，如凉皮、凉面等。",
       "foods": [
-        { "name": "青团", "calories": 220, "desc": "艾草汁和面，清淡幽香，软糯可口", "icon": "🟢" },
-        { "name": "秦镇凉皮", "calories": 280, "desc": "清明吃凉，酸辣开胃，关中特色", "icon": "🍜" },
-        { "name": "螺蛳肉", "calories": 150, "desc": "清明螺，抵只鹅，肉质肥美", "icon": "🐚" }
+        { "name": "青团", "calories": 220, "desc": "艾草汁和面，清淡幽香，软糯可口", "icon": "?" },
+        { "name": "秦镇凉皮", "calories": 280, "desc": "清明吃凉，酸辣开胃，关中特色", "icon": "?" },
+        { "name": "螺蛳肉", "calories": 150, "desc": "清明螺，抵只鹅，肉质肥美", "icon": "?" }
       ]
     },
     "dashu": {
@@ -84,9 +84,9 @@
       "color": "#fa8c16",
       "intro": "大暑是全年最热的节气，\"湿热交蒸\"在此时达到顶点。饮食应以清热解暑、健脾利湿为主。老陕人喜欢在夏天喝绿豆汤、吃浆水鱼鱼，既解暑又开胃。",
       "foods": [
-        { "name": "绿豆百合汤", "calories": 120, "desc": "消暑止渴，清心安神", "icon": "🥣" },
-        { "name": "浆水鱼鱼", "calories": 180, "desc": "酸香爽滑，也是陕西夏日消暑神器", "icon": "🐟" },
-        { "name": "苦瓜炒肉", "calories": 240, "desc": "苦味入心，清热祛火", "icon": "🥒" }
+        { "name": "绿豆百合汤", "calories": 120, "desc": "消暑止渴，清心安神", "icon": "?" },
+        { "name": "浆水鱼鱼", "calories": 180, "desc": "酸香爽滑，也是陕西夏日消暑神器", "icon": "?" },
+        { "name": "苦瓜炒肉", "calories": 240, "desc": "苦味入心，清热祛火", "icon": "?" }
       ]
     },
     "dongzhi": {
@@ -95,9 +95,9 @@
       "color": "#1890ff",
       "intro": "冬至是\"阴极之至，阳气始生\"的重要节气。在陕西，冬至地位极高，所谓\"冬至大如年\"。最核心的习俗就是吃饺子，寓意消寒，不冻耳朵；陕北地区则有喝羊肉汤的习惯，以此温补阳气。",
       "foods": [
-        { "name": "酸汤水饺", "calories": 450, "desc": "冬至不端饺子碗，冻掉耳朵没人管", "icon": "🥟" },
-        { "name": "铁锅炖羊肉", "calories": 500, "desc": "温中暖肾，抵御严寒", "icon": "🥘" },
-        { "name": "八宝粥", "calories": 300, "desc": "五谷杂粮，健脾养胃", "icon": "🥣" }
+        { "name": "酸汤水饺", "calories": 450, "desc": "冬至不端饺子碗，冻掉耳朵没人管", "icon": "?" },
+        { "name": "铁锅炖羊肉", "calories": 500, "desc": "温中暖肾，抵御严寒", "icon": "?" },
+        { "name": "八宝粥", "calories": 300, "desc": "五谷杂粮，健脾养胃", "icon": "?" }
       ]
     }
   }

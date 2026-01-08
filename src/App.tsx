@@ -180,7 +180,7 @@ const heritageData = [
     id: 4,
     title: '安塞腰鼓',
     category: '民俗舞蹈 / 延安',
-    image: 'https://img95.699pic.com/photo/40007/3569.jpg_wh860.jpg', 
+    image: 'https://cn.bing.com/images/search?view=detailV2&ccid=IWaOESCN&id=86C38B7DEE1DCB4CDAEE48F2D34D122875954035&thid=OIP.IWaOESCNqGRKnEahQ56wzwHaE7&mediaurl=https%3a%2f%2fts1.tc.mm.bing.net%2fth%2fid%2fR-C.21668e11208da8644a9c46a1439eb0cf%3frik%3dNUCVdSgSTdPySA%26riu%3dhttp%253a%252f%252fimg.pconline.com.cn%252fimages%252fupload%252fupc%252ftx%252fphotoblog%252f1006%252f01%252fc16%252f4077920_4077920_1275398392718.jpg%26ehk%3daKBueP3ldmhvabRp0Olxvf201nwMrYWpwh5TYWiNfFg%253d%26risl%3d%26pid%3dImgRaw%26r%3d0&exph=2832&expw=4256&q=%e5%ae%89%e5%a1%9e%e8%85%b0%e9%bc%93&FORM=IRPRST&ck=DA62E156ED239C397663CA60F7846EAA&selectedIndex=5&itb=0安塞腰鼓', 
     desc: '黄土高原上的"第一鼓"，气势磅礴。',
     detail: '安塞腰鼓是黄土高原上的一种独特的民间大型舞蹈艺术形式，具有2000年以上的历史。表演可由几人或上千人一同进行，磅礴的气势，精湛的技艺，使人叹为观止。',
     videoUrl: 'https://www.bilibili.com/video/BV1Mx411w7nQ/'
