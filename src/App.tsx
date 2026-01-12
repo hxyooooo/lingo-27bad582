@@ -5,6 +5,107 @@ import { format } from 'date-fns';
 // ==========================================
 // 1. 数据库模拟 (使用localStorage)
 // ==========================================
+// --- [新增] 登录页面组件 ---
+const LoginView = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = () => {
+    // 模拟登录逻辑
+    if (!username || !password) {
+      setError('请输入用户名和密码');
+      return;
+    }
+    
+    // 模拟验证：用户名 admin，密码 123456
+    if (username === 'admin' && password === '123456') {
+      setError('');
+      onLogin(username); // 回调父组件，传递用户信息
+    } else {
+      setError('用户名或密码错误');
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
+        {/* Logo/标题区域 */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full text-3xl font-bold mb-4 shadow-lg">
+            食
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">欢迎回来</h2>
+          <p className="text-gray-500 text-sm mt-2">AI健康饮食 · 陕西文化助手</p>
+        </div>
+
+        {/* 表单区域 */}
+        <div className="space-y-5">
+          {/* 用户名输入 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+            <div className="relative">
+              <User className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
+              <input 
+                type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="请输入用户名" 
+                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* 密码输入 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">密码</label>
+            <div className="relative">
+              <span className="absolute left-3 top-3 text-gray-400">🔒</span> {/* 假设没有Lock图标，用emoji代替 */}
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="请输入密码" 
+                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* 错误提示 */}
+          {error && (
+            <div className="text-red-500 text-sm bg-red-50 p-2 rounded flex items-center">
+              <span className="mr-2">⚠️</span> {error}
+            </div>
+          )}
+
+          {/* 登录按钮 */}
+          <button 
+            onClick={handleSubmit}
+            className="w-full bg-primary text-white py-3 rounded-lg font-bold text-lg hover:bg-opacity-90 transition-transform active:scale-95 shadow-md"
+          >
+            立即登录
+          </button>
+        </div>
+
+        {/* 底部链接 */}
+        <div className="mt-6 text-center text-sm text-gray-500">
+          还没有账号？ <span className="text-primary cursor-pointer hover:underline">立即注册</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- 集成建议 (修改主入口 App 组件) ---
+// const App = () => {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//
+//   if (!isLoggedIn) {
+//     return <LoginView onLogin={() => setIsLoggedIn(true)} />;
+//   }
+//
+//   return ( ... 原有的主要布局代码 ... );
+// };
 
 // 模拟数据库
 const db = {
