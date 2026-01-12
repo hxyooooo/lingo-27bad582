@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff } from 'lucide-react';
+import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { format } from 'date-fns';
 
 // ==========================================
@@ -348,7 +348,7 @@ const callCozeAgentAPI = async (userMessage) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296LmNuL3dvcmtsb2FkX2lkOjc1OTI0NzM4NzI3NDI0ODE5MjYiLCJzcmMiOiJpbmJvdW5kX2F1dGhfYWNjZXNzX3Rva2VuX2lkOjc1OTI0OTkxNDUwMTc5MTc0ODIifQ.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY29uLmNuL3dvcmtsb2FkX2lkOjc1OTI0NzM4NzI3NDI0ODE5MjYiLCJzcmMiOiJpbmJvdW5kX2F1dGhfYWNjZXNzX3Rva2VuX2lkOjc1OTI0OTkxNDUwMTc5MTc0ODIifQ.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
       },
       body: JSON.stringify(requestBody)
     });
