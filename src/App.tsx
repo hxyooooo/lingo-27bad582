@@ -1,83 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Camera, Calendar, BookOpen, User, Home, Settings, Search, Bell, Menu, X, Plus, AlertTriangle, CheckCircle, TrendingUp, Target, MessageSquare, HelpCircle, LogOut, ExternalLink, Eye, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 
 // ==========================================
-// 1. 用户认证数据库 (使用localStorage)
-// ==========================================
-
-const userDb = {
-  // 存储用户信息
-  getUsers: () => {
-    const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : [];
-  },
-  
-  // 添加新用户
-  addUser: (userData) => {
-    const users = userDb.getUsers();
-    const existingUser = users.find(user => user.username === userData.username || user.email === userData.email);
-    
-    if (existingUser) {
-      throw new Error('用户名或邮箱已被注册');
-    }
-    
-    const newUser = {
-      id: Date.now() + Math.random(),
-      username: userData.username,
-      email: userData.email,
-      password: userData.password, // 实际应用中应加密存储
-      createdAt: new Date().toISOString(),
-      isVip: false,
-      name: userData.username,
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + userData.username,
-      location: '陕西·西安',
-      bmi: 21.5,
-      weight: 62.5,
-      targetCalories: 1800
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    return newUser;
-  },
-  
-  // 验证用户登录
-  validateUser: (usernameOrEmail, password) => {
-    const users = userDb.getUsers();
-    const user = users.find(u => 
-      (u.username === usernameOrEmail || u.email === usernameOrEmail) && 
-      u.password === password
-    );
-    
-    if (user) {
-      // 登录成功，更新本地用户信息
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      return user;
-    }
-    return null;
-  },
-  
-  // 检查用户是否已登录
-  isLoggedIn: () => {
-    const currentUser = localStorage.getItem('currentUser');
-    return currentUser ? true : false;
-  },
-  
-  // 获取当前登录用户
-  getCurrentUser: () => {
-    const currentUser = localStorage.getItem('currentUser');
-    return currentUser ? JSON.parse(currentUser) : null;
-  },
-  
-  // 登出用户
-  logout: () => {
-    localStorage.removeItem('currentUser');
-  }
-};
-
-// ==========================================
-// 2. 数据库模拟 (使用localStorage)
+// 1. 数据库模拟 (使用localStorage)
 // ==========================================
 
 // 模拟数据库
@@ -218,7 +144,7 @@ const db = {
 };
 
 // ==========================================
-// 3. 全局数据准备
+// 2. 全局数据准备
 // ==========================================
 
 // --- 文化传承数据 (非遗长廊) ---
@@ -227,55 +153,55 @@ const heritageData = [
     id: 1,
     title: '陕西皮影戏',
     category: '民间美术 / 国家级非遗',
-    image: 'https://imgs.699pic.com/images/402/686/744.jpg!list1x.v2',
+    image: 'https://img95.699pic.com/photo/50064/0488.jpg_wh860.jpg',
     desc: '一口叙说千古事，双手对舞百万兵。',
     detail: '陕西皮影戏起源于汉代，兴盛于唐宋。其造型质朴单纯，富于装饰性，同时又具有精致工巧的艺术特色。表演时，艺人们在白色幕布后面，一边操纵影人，一边用秦腔讲述故事，吼出西北汉子的豪迈。',
-    videoUrl: 'https://www.bilibili.com/video/BV1Wc411f79E/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: 'https://www.bilibili.com/video/BV1Ax411w7F6/'
   },
   {
     id: 2,
     title: '秦腔',
     category: '传统戏剧 / 国家级非遗',
-    image: 'https://static.jingjiribao.cn/2022/6/14/139371_W020220614376771912762.jpeg', 
+    image: 'https://img95.699pic.com/photo/50046/5569.jpg_wh860.jpg', 
     desc: '八百里秦川尘土飞扬，三千万老陕齐吼秦腔。',
     detail: '秦腔，别称"邦子腔"，是中国西北最古老的戏剧之一。其特点是高昂激越、强烈急促。听秦腔，能感受到关中八百里秦川的厚重与沧桑，是国家级非物质文化遗产。',
-    videoUrl: 'https://www.bilibili.com/video/BV1k64y1y7oR/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: 'https://www.bilibili.com/video/BV1Qs411N7vK/'
   },
   {
     id: 3,
     title: '凤翔泥塑',
     category: '传统技艺 / 宝鸡',
-    image: 'https://x0.ifengimg.com/ucms/2025_22/9B67A975153E2363431EFCC5EE3A980883D4FFF3_size547_w1000_h666.jpg',
+    image: 'https://img95.699pic.com/photo/50160/3277.jpg_wh860.jpg',
     desc: '色彩艳丽，造型夸张，寓意驱邪避灾。',
     detail: '凤翔泥塑汲取了古代石刻、年画、剪纸和刺otto的纹饰，造型夸张，色彩鲜艳，深受人们喜爱。其中以"挂虎"和"坐虎"最为典型，寓意驱邪避灾，吉祥如意。',
-    videoUrl: 'https://www.bilibili.com/video/BV1DL4y1P7b3/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: 'https://www.bilibili.com/video/BV1UW411M7Sg/'
   },
   {
     id: 4,
     title: '安塞腰鼓',
     category: '民俗舞蹈 / 延安',
-    image: 'https://ts1.tc.mm.bing.net/th/id/R-C.21668e11208da8644a9c46a1439eb0cf?rik=NUCVdSgSTdPySA&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fphotoblog%2f1006%2f01%2fc16%2f4077920_4077920_1275398392718.jpg&ehk=aKBueP3ldmhvabRp0Olxvf201nwMrYWpwh5TYWiNfFg%3d&risl=&pid=ImgRaw&r=0', 
+    image: 'https://img95.699pic.com/photo/40007/3569.jpg_wh860.jpg', 
     desc: '黄土高原上的"第一鼓"，气势磅礴。',
     detail: '安塞腰鼓是黄土高原上的一种独特的民间大型舞蹈艺术形式，具有2000年以上的历史。表演可由几人或上千人一同进行，磅礴的气势，精湛的技艺，使人叹为观止。',
-    videoUrl: 'https://www.bilibili.com/video/BV199pTebEoG/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: 'https://www.bilibili.com/video/BV1Mx411w7nQ/'
   },
   {
     id: 5,
     title: '同州梆子',
     category: '传统戏剧 / 渭南',
-    image: 'https://ts2.tc.mm.bing.net/th/id/OIP-C.9ExaJXuBKtBPnE37LzjP0wAAAA?rs=1&pid=ImgDetMain&o=7&rm=3',
+    image: 'https://img95.699pic.com/photo/50055/5638.jpg_wh860.jpg',
     desc: '秦腔的鼻祖，唱腔激越豪放。',
     detail: '同州梆子是陕西省东府渭南地区的地方戏曲剧种，是秦腔的前身。它保留了更多古老的音韵和表演程式，具有极高的艺术研究价值。',
-    videoUrl: 'https://www.bilibili.com/video/BV1ciwneoEa4/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: '#'
   },
   {
     id: 6,
     title: '耀州窑陶瓷',
     category: '传统技艺 / 铜川',
-    image: 'https://ts1.tc.mm.bing.net/th/id/R-C.048cb580c92ff3c9779f05279ebc0af6?rik=mmKZ7%2brSDLcLpw&riu=http%3a%2f%2fzhongguociwang.cn%2fupload%2f2017-02%2f17021417595907.jpg&ehk=qFH9ZGaeJUPEkmjEosDGmKiqrxDNJFT3Axrtwo%2fZIe0%3d&risl=&pid=ImgRaw&r=0',
+    image: 'https://img95.699pic.com/photo/50059/8966.jpg_wh860.jpg',
     desc: '巧如范金，精比琢玉，北方青瓷代表。',
     detail: '耀州窑是中国传统制瓷工艺中的珍品，宋代六大窑系。其刀法犀利流畅，线条刚劲有力，素有"北方青瓷之冠"的美誉。',
-    videoUrl: 'https://www.bilibili.com/video/BV15E411i7mq/?spm_id_from=333.337.search-card.all.click'
+    videoUrl: '#'
   }
 ];
 
@@ -287,9 +213,9 @@ const seasonalData = {
     color: '#52c41a',
     intro: '立春，为二十四节气之首。立，是"开始"之意；春，代表着温暖、生长。立春不仅是春天的开始，也是一年农事活动的开端。陕西民间有"咬春"的习俗，吃春饼、嚼萝卜，祈求身体健康，五谷丰登。',
     foods: [
-      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: '.' },
-      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: '.' },
-      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: '.' }
+      { name: '春饼卷素', calories: 320, desc: '薄饼卷土豆丝、豆芽，寓意咬住春天', icon: '?' },
+      { name: '凉拌萝卜丝', calories: 80, desc: '清脆爽口，顺气消食，谓之"咬春"', icon: '?' },
+      { name: '韭菜炒鸡蛋', calories: 260, desc: '春令时鲜，助阳生发', icon: '?' }
     ]
   },
   qingming: {
@@ -298,9 +224,9 @@ const seasonalData = {
     color: '#13c2c2',
     intro: '清明时节雨纷纷，万物生长此时洁净而明清。此时节气温转暖，但早晚仍有凉意。饮食宜温和，多吃柔肝养肺的食物。陕西关中地区有吃"寒食"的遗风，如凉皮、凉面等。',
     foods: [
-      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: '.' },
-      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: '.' },
-      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: '.' }
+      { name: '青团', calories: 220, desc: '艾草汁和面，清淡幽香，软糯可口', icon: '?' },
+      { name: '秦镇凉皮', calories: 280, desc: '清明吃凉，酸辣开胃，关中特色', icon: '?' },
+      { name: '螺蛳肉', calories: 150, desc: '清明螺，抵只鹅，肉质肥美', icon: '?' }
     ]
   },
   dashu: {
@@ -309,9 +235,9 @@ const seasonalData = {
     color: '#fa8c16',
     intro: '大暑是全年最热的节气，"湿热交蒸"在此时达到顶点。饮食应以清热解暑、健脾利湿为主。老陕人喜欢在夏天喝绿豆汤、吃浆水鱼鱼，既解暑又开胃。',
     foods: [
-      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: '.' },
-      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: '.' },
-      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: '.' }
+      { name: '绿豆百合汤', calories: 120, desc: '消暑止渴，清心安神', icon: '?' },
+      { name: '浆水鱼鱼', calories: 180, desc: '酸香爽滑，也是陕西夏日消暑神器', icon: '?' },
+      { name: '苦瓜炒肉', calories: 240, desc: '苦味入心，清热祛火', icon: '?' }
     ]
   },
   dongzhi: {
@@ -320,15 +246,15 @@ const seasonalData = {
     color: '#1890ff',
     intro: '冬至是"阴极之至，阳气始生"的重要节气。在陕西，冬至地位极高，所谓"冬至大如年"。最核心的习俗就是吃饺子，寓意消寒，不冻耳朵；陕北地区则有喝羊肉汤的习惯，以此温补阳气。',
     foods: [
-      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: '.' },
-      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: '.' },
-      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: '.' }
+      { name: '酸汤水饺', calories: 450, desc: '冬至不端饺子碗，冻掉耳朵没人管', icon: '?' },
+      { name: '铁锅炖羊肉', calories: 500, desc: '温中暖肾，抵御严寒', icon: '?' },
+      { name: '八宝粥', calories: 300, desc: '五谷杂粮，健脾养胃', icon: '?' }
     ]
   }
 };
 
 // ==========================================
-// 4. Coze智能体API调用函数
+// 3. Coze智能体API调用函数
 // ==========================================
 
 // Coze智能体API调用函数
@@ -348,7 +274,7 @@ const callCozeAgentAPI = async (userMessage) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY29uLmNuL3dvcmtsb2FkX2lkOjc1OTI0NzM4NzI3NDI0ODE5MjYiLCJzcmMiOiJpbmJvdW5kX2F1dGhfYWNjZXNzX3Rva2VuX2lkOjc1OTI0OTkxNDUwMTc5MTc0ODIifQ.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
       },
       body: JSON.stringify(requestBody)
     });
@@ -383,7 +309,7 @@ const callIntelligentAgentAPI = async (userMessage) => {
 };
 
 // ==========================================
-// 5. AI健康报告生成算法
+// 4. AI健康报告生成算法
 // ==========================================
 
 // AI健康报告生成函数
@@ -438,7 +364,7 @@ const generateAIHealthReport = (userInfo, dietList, historicalData) => {
   
   if (dietList.length === 0) {
     dietStructure = '今日尚未记录任何饮食。';
-    dietRecommendation = '建议使用AI识食功能或节气饮食功能记录您的饮食，以便获得更精准的健康建议。';
+    dietRecommendation = '建议使用AI识食功能或节气食谱功能记录您的饮食，以便获得更精准的健康建议。';
   } else {
     const foodNames = dietList.map(item => item.name).join('、');
     dietStructure = `今日饮食包括：${foodNames}。`;
@@ -545,276 +471,7 @@ const generateAIHealthReport = (userInfo, dietList, historicalData) => {
 };
 
 // ==========================================
-// 6. 登录注册页面组件
-// ==========================================
-
-const LoginRegisterView = ({ onLoginSuccess }) => {
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      const user = userDb.validateUser(username, password);
-      if (user) {
-        onLoginSuccess(user);
-      } else {
-        setError('用户名或密码错误');
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    if (password !== confirmPassword) {
-      setError('两次输入的密码不一致');
-      setIsLoading(false);
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('密码长度至少为6位');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const newUser = userDb.addUser({ username, email, password });
-      // 自动登录新注册的用户
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      onLoginSuccess(newUser);
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-light to-background flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-        <div className="bg-primary p-8 text-white text-center">
-          <h1 className="text-3xl font-bold">AI健康饮食</h1>
-          <p className="text-primary-light mt-2">陕西传统文化融合平台</p>
-        </div>
-        
-        <div className="p-8">
-          {/* Tab切换 */}
-          <div className="flex border-b border-gray-200 mb-6">
-            <button
-              className={`flex-1 py-3 font-medium ${
-                activeTab === 'login' 
-                  ? 'text-primary border-b-2 border-primary' 
-                  : 'text-gray-500 hover:text-primary'
-              }`}
-              onClick={() => setActiveTab('login')}
-            >
-              登录
-            </button>
-            <button
-              className={`flex-1 py-3 font-medium ${
-                activeTab === 'register' 
-                  ? 'text-primary border-b-2 border-primary' 
-                  : 'text-gray-500 hover:text-primary'
-              }`}
-              onClick={() => setActiveTab('register')}
-            >
-              注册
-            </button>
-          </div>
-          
-          {/* 错误提示 */}
-          {error && (
-            <div className="bg-error-light text-error p-3 rounded-lg mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" />
-              <span>{error}</span>
-            </div>
-          )}
-          
-          {/* 登录表单 */}
-          {activeTab === 'login' && (
-            <form onSubmit={handleLogin}>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">用户名或邮箱</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请输入用户名或邮箱"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <label className="block text-gray-700 mb-2">密码</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <Lock className="w-5 h-5" />
-                  </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请输入密码"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-gray-400"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-              
-              <button
-                type="submit"
-                disabled={isLoading}
-                className={`w-full py-3 bg-primary text-white rounded-lg font-medium ${
-                  isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-dark'
-                }`}
-              >
-                {isLoading ? '登录中...' : '登录'}
-              </button>
-              
-              <div className="text-center mt-4 text-sm text-gray-600">
-                <a href="#" className="text-primary hover:underline">忘记密码？</a>
-              </div>
-            </form>
-          )}
-          
-          {/* 注册表单 */}
-          {activeTab === 'register' && (
-            <form onSubmit={handleRegister}>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">用户名</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请输入用户名"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">邮箱</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请输入邮箱地址"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">密码</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <Lock className="w-5 h-5" />
-                  </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请输入密码（至少6位）"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-gray-400"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <label className="block text-gray-700 mb-2">确认密码</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-3.5 text-gray-400">
-                    <Lock className="w-5 h-5" />
-                  </div>
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="请再次输入密码"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3.5 text-gray-400"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-              
-              <button
-                type="submit"
-                disabled={isLoading}
-                className={`w-full py-3 bg-primary text-white rounded-lg font-medium ${
-                  isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-dark'
-                }`}
-              >
-                {isLoading ? '注册中...' : '注册'}
-              </button>
-            </form>
-          )}
-          
-          <div className="mt-6 text-center text-sm text-gray-600">
-            <p>登录即表示您同意我们的 <a href="#" className="text-primary hover:underline">服务条款</a> 和 <a href="#" className="text-primary hover:underline">隐私政策</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ==========================================
-// 7. 页面组件
+// 5. 页面组件
 // ==========================================
 
 // --- 首页 ---
@@ -1861,15 +1518,7 @@ const PersonalCenterView = ({ dietList = [], onDelete }) => {
         <MenuItem icon="?" title="消息通知" />
         <MenuItem icon="?" title="系统设置" />
         <MenuItem icon="❓" title="帮助与反馈" />
-        <MenuItem 
-          icon="?" 
-          title="退出登录" 
-          isRed 
-          onClick={() => {
-            userDb.logout();
-            window.location.hash = '#login';
-          }} 
-        />
+        <MenuItem icon="?" title="退出登录" isRed />
       </div>
 
       {/* 健康报告详情弹窗 */}
@@ -2005,122 +1654,113 @@ const AIAssistant = ({ isOpen, onClose }) => {
   }, [messages]);
 
   // 调用智能体API
-  const API_URL = 'http://47.86.161.122:8000/run';
-
-  const callAPI = async (text, imageFile = null) => {
+  const callAPI = async (userMessage, imageUrls = []) => {
     try {
-      let options = {};
+      // 使用Coze智能体API，而不是本地API
+      const requestBody = {
+        user_id: "user123", // 可以根据需要生成用户ID
+        stream: false, // 非流式响应
+        query: userMessage,
+        conversation_id: "", // 空字符串表示新对话
+        attachments: [] // 暂时没有附件
+      };
 
-      if (imageFile) {
-        // ? 情况 A: 有图片，使用 FormData (自动适配 multipart/form-data)
-        const formData = new FormData();
-        formData.append('text', text);
-        formData.append('image', imageFile); // 把原始文件放进去
-
-        options = {
-          method: 'POST',
-          body: formData,
-          // 注意：发 FormData 时，千万不要手动设置 Content-Type，浏览器会自动处理
-        };
-      } else {
-        // ? 情况 B: 只有文字，使用 JSON
-        options = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            messages: [{ role: 'user', content: text }]
-          }),
-        };
-      }
-
-      const response = await fetch(API_URL, options);
+      const response = await fetch('https://7kf89hm5y6.coze.site/stream_run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImEzYzBiMjdjLWI4YjMtNGIxMy1hNWU1LTExMTE3MzBjYjkwMCJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIjBYNmE2eWNlRGJIbVZmUHhuR3NqeHpXc0VxcWpheU1UIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzY3NzY2NDYyLCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZDo3NTkyNDczODcyNzQyNDgxOTI2Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NTkyNDk5MTQ1MDE3OTE3NDgyIn0.OGAsjEO0rTbTMHci5AUIKxVtxJt1giuGG_BHyc0p1uyn_B0ZAsQrzWOWbZukXM5C1zrIuqEK7_bbRd8Ojhq6z3fF5OYU3qFWHKMLlyi4Zqr-1OQ5yr-SfwkG1fRvT7iN990OY5BKNBdFq-gsKGM7hVj-qwVuKxAJFWLO0dFle67h7OXLbFDeJ45_KYD0Lki_0FPrYLD08gCQ2Ni3dsKmJIxspvmAw2Pi_akRm_PwEf4Su-7FUHIekLXcalU0V-aeEXi5MxxEEiVFbcyLpYTaHJtmtIl_elpk24cATfMFBjlS5tL3dZwT4mRlgvn8XSzupei8iHA809zAvYWWttNYcA'
+        },
+        body: JSON.stringify(requestBody)
+      });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
-      return data.content || "未获取到有效回复";
-
+      
+      // 提取AI回复
+      if (data && data.message) {
+        return data.message;
+      } else if (data && data.content) {
+        return data.content;
+      } else {
+        // 如果响应格式不同，返回整个响应的字符串表示
+        return JSON.stringify(data);
+      }
+      
     } catch (error) {
-      console.error("API调用失败:", error);
-      return "抱歉，系统暂时无法响应，请检查后端连接。";
+      console.error('API调用失败:', error);
+      
+      // 更详细的错误提示
+      if (error.message.includes('Failed to fetch')) {
+        return '无法连接到服务器，请检查：\n1. 服务是否已启动\n2. 网络连接是否正常\n3. 是否存在跨域问题';
+      }
+      
+      return `抱歉，系统暂时无法提供服务。错误：${error.message}`;
     }
   };
 
-
-
-    const handleSendMessage = async () => {
-    // 如果没有输入且没有图片，直接返回
+  const handleSendMessage = async () => {
     if (inputValue.trim() === '' && uploadedImages.length === 0) return;
-
-    const currentText = inputValue;
-    const currentImages = [...uploadedImages]; // 复制一份当前的图片列表
     
-    // 1. 设置用户消息显示
-    const newUserMsg = {
+    // 添加用户消息
+    const newUserMessage = {
       id: Date.now(),
       type: 'user',
-      content: currentText,
-      images: currentImages,
-      timestamp: new Date()
+      content: inputValue,
+      images: uploadedImages // 如果有图片
     };
     
-    setMessages(prev => [...prev, newUserMsg]);
+    setMessages(prev => [...prev, newUserMessage]);
     setInputValue('');
-    setUploadedImages([]); // 清空上传区
     setIsTyping(true);
-
+    
     try {
-      // 2. 准备发送的数据
-      // 目前后端只支持一次传一张图，我们取第一张
-      const imageToSend = currentImages.length > 0 ? currentImages[0].originFile : null;
-
-      // 3. 调用 API
-      const aiResponseText = await callAPI(currentText, imageToSend);
-
-      // 4. 显示 AI 回复
-      const newAiMsg = {
+      // 调用智能体API获取回复
+      const aiResponse = await callAPI(
+        inputValue, 
+        uploadedImages.map(img => img.url)
+      );
+      
+      // 添加AI回复
+      const aiMessage = {
         id: Date.now() + 1,
-        type: 'ai',
-        content: aiResponseText,
-        timestamp: new Date()
+        type: 'assistant',
+        content: aiResponse
       };
-      setMessages(prev => [...prev, newAiMsg]);
-
+      
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      const errorMsg = {
+      // 显示错误消息
+      const errorMessage = {
         id: Date.now() + 1,
-        type: 'ai',
-        content: "发生错误，请重试。",
-        timestamp: new Date()
+        type: 'assistant',
+        content: `❌ 发生错误：${error.message}`
       };
-      setMessages(prev => [...prev, errorMsg]);
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
+      setUploadedImages([]); // 清空上传的图片
     }
   };
-
 
   // 图片上传处理
   const handleImageUpload = (e) => {
-    const files = e.target.files;
-    if (files) {
-      Array.from(files).forEach(file => {
-        // 使用 URL.createObjectURL 生成预览，既快又保留了原始 file 对象
-        const newImage = {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setUploadedImages(prev => [...prev, {
           id: Date.now(),
-          url: URL.createObjectURL(file), 
-          name: file.name,
-          originFile: file // ? 关键：保存原始文件对象，发送时要用
-        };
-        setUploadedImages(prev => [...prev, newImage]);
-      });
-    }
+          url: event.target.result,
+          name: file.name
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
   };
-
 
   // 其他代码保持不变...
   const handleKeyPress = (e) => {
@@ -2267,7 +1907,7 @@ const AIAssistant = ({ isOpen, onClose }) => {
 };
 
 // ==========================================
-// 8. 布局结构 (修改版：左侧导航 + 顶部标题栏)
+// 6. 布局结构 (修改版：左侧导航 + 顶部标题栏)
 // ==========================================
 
 // 侧边栏按钮组件
@@ -2286,21 +1926,9 @@ const SidebarItem = ({ label, icon, active, onClick }) => (
 );
 
 function App() {
-  const [activePage, setActivePage] = useState(userDb.isLoggedIn() ? 'home' : 'login'); // 初始页面根据登录状态决定
+  const [activePage, setActivePage] = useState('home');
   const [dietList, setDietList] = useState(db.getDietRecords());
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
-
-  // 登录成功回调
-  const handleLoginSuccess = (user) => {
-    db.updateUserInfo(user);
-    setActivePage('home');
-  };
-
-  // 退出登录
-  const handleLogout = () => {
-    userDb.logout();
-    setActivePage('login');
-  };
 
   // 监听URL hash变化
   useEffect(() => {
@@ -2310,8 +1938,6 @@ function App() {
         setActivePage('historical-data');
       } else if (hash === '#health-goals') {
         setActivePage('health-goals');
-      } else if (hash === '#login') {
-        setActivePage('login');
       }
     };
 
@@ -2338,110 +1964,87 @@ function App() {
   return (
     // 1. 最外层容器：Flex纵向排列，占满全屏
     <div className="font-sans bg-background h-screen flex flex-col overflow-hidden">
-      {/* 如果用户未登录，只显示登录注册页面 */}
-      {!userDb.isLoggedIn() && activePage !== 'login' && (
-        <LoginRegisterView onLoginSuccess={handleLoginSuccess} />
-      )}
+      
+      {/* 2. 顶部导航栏 (Header) */}
+      <header className="bg-primary h-16 flex items-center justify-between px-6 shadow-lg z-20 text-white">
+        {/* 左上方：标题 */}
+        <div className="flex items-center font-bold text-xl">
+           <span className="mr-3 bg-white text-primary w-9 h-9 rounded-full flex items-center justify-center text-2xl shadow-md">食</span>
+           AI健康饮食 · 陕西文化
+        </div>
 
-      {/* 登录后显示主界面 */}
-      {(userDb.isLoggedIn() || activePage === 'login') && (
-        <>
-          {/* 顶部导航栏 - 如果已登录则显示完整导航 */}
-          {userDb.isLoggedIn() && (
-            <header className="bg-primary h-16 flex items-center justify-between px-6 shadow-lg z-20 text-white">
-              {/* 左上方：标题 */}
-              <div className="flex items-center font-bold text-xl">
-                 <span className="mr-3 bg-white text-primary w-9 h-9 rounded-full flex items-center justify-center text-2xl shadow-md">食</span>
-                 AI健康饮食 · 陕西文化
+        {/* 右上方：登录/用户信息 */}
+        <div className="flex items-center gap-5">
+           <Bell className="w-5 h-5 cursor-pointer opacity-90 hover:opacity-100" />
+           <div className="flex items-center gap-2.5 cursor-pointer bg-white bg-opacity-20 px-4 py-1.5 rounded-full transition-colors hover:bg-opacity-30">
+              <div className="w-7 h-7 bg-gray-400 rounded-full border-2 border-white overflow-hidden">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="user" className="w-full h-full" />
               </div>
+              <span className="text-white text-sm font-medium">用户管理员</span>
+           </div>
+        </div>
+      </header>
 
-              {/* 右上方：登录/用户信息 */}
-              <div className="flex items-center gap-5">
-                 <Bell className="w-5 h-5 cursor-pointer opacity-90 hover:opacity-100" />
-                 <div className="flex items-center gap-2.5 cursor-pointer bg-white bg-opacity-20 px-4 py-1.5 rounded-full transition-colors hover:bg-opacity-30">
-                    <div className="w-7 h-7 bg-gray-400 rounded-full border-2 border-white overflow-hidden">
-                      <img 
-                        src={db.getUserInfo().avatar} 
-                        alt="user" 
-                        className="w-full h-full" 
-                      />
-                    </div>
-                    <span className="text-white text-sm font-medium">{db.getUserInfo().name}</span>
-                 </div>
-              </div>
-            </header>
-          )}
-
-          {/* 3. 下方主体内容 (Body) */}
-          <div className="flex flex-1 overflow-hidden">
-            
-            {/* 左侧：竖排导航栏 (Sidebar) - 仅在登录后显示 */}
-            {userDb.isLoggedIn() && (
-              <aside className="w-60 bg-white shadow-lg flex flex-col pt-5 z-10">
-                {/* 搜索框 */}
-                <div className="px-5 pb-5">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
-                    <input 
-                      type="text" 
-                      placeholder="搜索功能..." 
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 outline-none box-border"
-                    />
-                  </div>
-                </div>
-
-                {/* 导航菜单 */}
-                <div className="flex-1 overflow-y-auto">
-                  <SidebarItem label="首页概览" icon={<Home className="w-5 h-5" />} active={activePage === 'home'} onClick={() => setActivePage('home')} />
-                  <SidebarItem label="AI识食" icon={<Camera className="w-5 h-5" />} active={activePage === 'recognition'} onClick={() => setActivePage('recognition')} />
-                  <SidebarItem label="节气饮食" icon={<Calendar className="w-5 h-5" />} active={activePage === 'season'} onClick={() => setActivePage('season')} />
-                  <SidebarItem label="文化传承" icon={<BookOpen className="w-5 h-5" />} active={activePage === 'culture'} onClick={() => setActivePage('culture')} />
-                  <SidebarItem label="个人中心" icon={<User className="w-5 h-5" />} active={activePage === 'report'} onClick={() => setActivePage('report')} />
-                </div>
-
-                {/* 底部设置 */}
-                <div className="px-5 py-5 border-t border-gray-200 text-gray-500 text-sm flex items-center gap-2 cursor-pointer hover:bg-gray-50">
-                   <LogOut className="w-4 h-4" onClick={handleLogout}/> 退出登录
-                </div>
-              </aside>
-            )}
-
-            {/* 右侧：主内容区域 (Main) */}
-            <main className={`flex-1 overflow-y-auto p-8 bg-background relative ${userDb.isLoggedIn() ? '' : 'hidden'}`}>
-              {/* 页面路由渲染 */}
-              {activePage === 'home' && <HomeView toPage={setActivePage} />}
-              {activePage === 'recognition' && <RecognitionView onAdd={handleAddToDiet} />}
-              {activePage === 'season' && <SeasonalView onAdd={handleAddToDiet} />}
-              {activePage === 'culture' && <CultureView />}
-              {activePage === 'report' && <PersonalCenterView dietList={dietList} onDelete={handleDeleteDiet} />}
-              {activePage === 'historical-data' && <HistoricalDataView />}
-              {activePage === 'health-goals' && <HealthGoalsView />}
-              {activePage === 'login' && <LoginRegisterView onLoginSuccess={handleLoginSuccess} />}
-            </main>
-          </div>
-          
-          {/* 悬浮助手按钮 - 仅在登录后显示 */}
-          {userDb.isLoggedIn() && (
-            <div 
-              onClick={() => setIsAIAssistantOpen(true)}
-              className="fixed bottom-10 right-10 bg-success text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center gap-2 z-40 font-bold hover:bg-success-dark transition-colors"
-            >
-              <span>✨</span> AI助手
+      {/* 3. 下方主体内容 (Body) */}
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* 左侧：竖排导航栏 (Sidebar) */}
+        <aside className="w-60 bg-white shadow-lg flex flex-col pt-5 z-10">
+          {/* 搜索框 */}
+          <div className="px-5 pb-5">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
+              <input 
+                type="text" 
+                placeholder="搜索功能..." 
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 outline-none box-border"
+              />
             </div>
-          )}
+          </div>
 
-          {/* AI助手对话框 - 仅在登录后显示 */}
-          {userDb.isLoggedIn() && (
-            <AIAssistant 
-              isOpen={isAIAssistantOpen} 
-              onClose={() => setIsAIAssistantOpen(false)} 
-            />
-          )}
-        </>
-      )}
+          {/* 导航菜单 */}
+          <div className="flex-1 overflow-y-auto">
+            <SidebarItem label="首页概览" icon={<Home className="w-5 h-5" />} active={activePage === 'home'} onClick={() => setActivePage('home')} />
+            <SidebarItem label="AI识食" icon={<Camera className="w-5 h-5" />} active={activePage === 'recognition'} onClick={() => setActivePage('recognition')} />
+            <SidebarItem label="节气饮食" icon={<Calendar className="w-5 h-5" />} active={activePage === 'season'} onClick={() => setActivePage('season')} />
+            <SidebarItem label="文化传承" icon={<BookOpen className="w-5 h-5" />} active={activePage === 'culture'} onClick={() => setActivePage('culture')} />
+            <SidebarItem label="个人中心" icon={<User className="w-5 h-5" />} active={activePage === 'report'} onClick={() => setActivePage('report')} />
+          </div>
+
+          {/* 底部设置 */}
+          <div className="px-5 py-5 border-t border-gray-200 text-gray-500 text-sm flex items-center gap-2 cursor-pointer hover:bg-gray-50">
+             <Settings className="w-4 h-4" /> 系统设置
+          </div>
+        </aside>
+
+        {/* 右侧：主内容区域 (Main) */}
+        <main className="flex-1 overflow-y-auto p-8 bg-background relative">
+          {/* 页面路由渲染 */}
+          {activePage === 'home' && <HomeView toPage={setActivePage} />}
+          {activePage === 'recognition' && <RecognitionView onAdd={handleAddToDiet} />}
+          {activePage === 'season' && <SeasonalView onAdd={handleAddToDiet} />}
+          {activePage === 'culture' && <CultureView />}
+          {activePage === 'report' && <PersonalCenterView dietList={dietList} onDelete={handleDeleteDiet} />}
+          {activePage === 'historical-data' && <HistoricalDataView />}
+          {activePage === 'health-goals' && <HealthGoalsView />}
+        </main>
+      </div>
+      
+      {/* 悬浮助手按钮 */}
+      <div 
+        onClick={() => setIsAIAssistantOpen(true)}
+        className="fixed bottom-10 right-10 bg-success text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center gap-2 z-40 font-bold hover:bg-success-dark transition-colors"
+      >
+        <span>✨</span> AI助手
+      </div>
+
+      {/* AI助手对话框 */}
+      <AIAssistant 
+        isOpen={isAIAssistantOpen} 
+        onClose={() => setIsAIAssistantOpen(false)} 
+      />
     </div>
   );
 }
 
 export default App;
-
